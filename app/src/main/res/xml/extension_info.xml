@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExtensionInfo
+    id="pantallas"
+    displayName="@string/extension_name"
+    icon="@drawable/ic_app"
+    scansDevices="false">
+    <DataType
+        typeId="ruta-oscura"
+        displayName="@string/ruta_oscura_name"
+        description="@string/ruta_oscura_desc"
+        graphical="true"
+        icon="@drawable/ic_ruta" />
+    <DataType
+        typeId="ruta-clara"
+        displayName="@string/ruta_clara_name"
+        description="@string/ruta_clara_desc"
+        graphical="true"
+        icon="@drawable/ic_ruta_claro" />
+    <DataType
+        typeId="velocidad-oscura"
+        displayName="@string/velocidad_oscura_name"
+        description="@string/velocidad_oscura_desc"
+        graphical="true"
+        icon="@drawable/ic_velocidad" />
+    <DataType
+        typeId="velocidad-clara"
+        displayName="@string/velocidad_clara_name"
+        description="@string/velocidad_clara_desc"
+        graphical="true"
+        icon="@drawable/ic_velocidad" />
+    <DataType
+        typeId="potencia-oscura"
+        displayName="@string/potencia_oscura_name"
+        description="@string/potencia_oscura_desc"
+        graphical="true"
+        icon="@drawable/ic_potencia" />
+    <DataType
+        typeId="potencia-clara"
+        displayName="@string/potencia_clara_name"
+        description="@string/potencia_clara_desc"
+        graphical="true"
+        icon="@drawable/ic_potencia" />
+    <DataType
+        typeId="pulso-oscura"
+        displayName="@string/pulso_oscura_name"
+        description="@string/pulso_oscura_desc"
+        graphical="true"
+        icon="@drawable/ic_pulso" />
+    <DataType
+        typeId="pulso-clara"
+        displayName="@string/pulso_clara_name"
+        description="@string/pulso_clara_desc"
+        graphical="true"
+        icon="@drawable/ic_pulso" />
+    <DataType
+        typeId="subida-oscura"
+        displayName="@string/subida_oscura_name"
+        description="@string/subida_oscura_desc"
+        graphical="true"
+        icon="@drawable/ic_subida" />
+    <DataType
+        typeId="subida-clara"
+        displayName="@string/subida_clara_name"
+        description="@string/subida_clara_desc"
+        graphical="true"
+        icon="@drawable/ic_subida" />
+</ExtensionInfo>

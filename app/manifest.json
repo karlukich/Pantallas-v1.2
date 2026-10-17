@@ -1,0 +1,10 @@
+{
+  "label": "Karoo Pantallas",
+  "packageName": "com.carlos.karoopantallas",
+  "latestApkUrl": "https://github.com/TU_USUARIO/KarooPantallas/releases/latest/download/karoo-pantallas.apk",
+  "latestVersion": "1.2",
+  "latestVersionCode": 3,
+  "developer": "Carlos Castillo",
+  "description": "Pantallas de datos a página completa en modo oscuro y claro: ruta, velocidad y tiempo, potencia, pulso y subida (Climber).",
+  "releaseNotes": "Diez pantallas: 1B/1C a 5B/5C."
+}

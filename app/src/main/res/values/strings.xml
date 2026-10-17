@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Karoo Pantallas</string>
+    <string name="extension_name">Pantallas</string>
+
+    <string name="ruta_oscura_name">1B · Ruta (oscuro)</string>
+    <string name="ruta_oscura_desc">Velocidad y media, potencia con zona y normalizada, pulso con zona, pendiente, distancia y desnivel. Fondo negro.</string>
+    <string name="ruta_clara_name">1C · Ruta (claro)</string>
+    <string name="ruta_clara_desc">Velocidad y media, potencia con zona y normalizada, pulso con zona, pendiente, distancia y desnivel. Fondo claro, para pleno sol.</string>
+    <string name="velocidad_oscura_name">2B · Velocidad y tiempo (oscuro)</string>
+    <string name="velocidad_oscura_desc">Velocidad, media y máxima, distancia total y de vuelta, tiempo en movimiento y total, distancia a destino y hora de llegada. Fondo negro.</string>
+    <string name="velocidad_clara_name">2C · Velocidad y tiempo (claro)</string>
+    <string name="velocidad_clara_desc">Velocidad, media y máxima, distancia total y de vuelta, tiempo en movimiento y total, distancia a destino y hora de llegada. Fondo claro, para pleno sol.</string>
+    <string name="potencia_oscura_name">3B · Potencia a fondo (oscuro)</string>
+    <string name="potencia_oscura_desc">Potencia 3 s con zona y límites, W/kg, 10 s, 30 s, vuelta, normalizada, media, máxima, IF, TSS y kJ. Fondo negro.</string>
+    <string name="potencia_clara_name">3C · Potencia a fondo (claro)</string>
+    <string name="potencia_clara_desc">Potencia 3 s con zona y límites, W/kg, 10 s, 30 s, vuelta, normalizada, media, máxima, IF, TSS y kJ. Fondo claro, para pleno sol.</string>
+    <string name="pulso_oscura_name">4B · Pulso a fondo (oscuro)</string>
+    <string name="pulso_oscura_desc">Pulso con zona, % de FC máxima, media, máxima, vuelta, tiempo en zona, Z4+, deriva y tiempo en cada zona. Fondo negro.</string>
+    <string name="pulso_clara_name">4C · Pulso a fondo (claro)</string>
+    <string name="pulso_clara_desc">Pulso con zona, % de FC máxima, media, máxima, vuelta, tiempo en zona, Z4+, deriva y tiempo en cada zona. Fondo claro, para pleno sol.</string>
+    <string name="subida_oscura_name">5B · Subida (Climber) (oscuro)</string>
+    <string name="subida_oscura_desc">Perfil del puerto actual de la ruta, pendiente, VAM, distancia y desnivel que quedan, tiempo a cima, potencia, W/kg y pulso. Fondo negro.</string>
+    <string name="subida_clara_name">5C · Subida (Climber) (claro)</string>
+    <string name="subida_clara_desc">Perfil del puerto actual de la ruta, pendiente, VAM, distancia y desnivel que quedan, tiempo a cima, potencia, W/kg y pulso. Fondo claro, para pleno sol.</string>
+
+    <string name="main_text">Karoo Pantallas está instalada.\n\nPara usarla:\n1. Ve a Perfiles y elige uno.\n2. Añade una página nueva con un solo campo.\n3. Toca el campo, entra en «Pantallas» y elige la pantalla: 1B/1C Ruta, 2B/2C Velocidad, 3B/3C Potencia, 4B/4C Pulso o 5B/5C Subida (B = oscuro, C = claro).\n\nLas zonas de potencia y pulso salen de tu perfil del Karoo. La pantalla de subida necesita una ruta cargada con puertos.</string>
+</resources>
