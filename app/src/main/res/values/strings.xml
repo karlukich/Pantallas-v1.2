@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Karoo Pantallas</string>
-    <string name="extension_name">Pantallas</string>
+    <string name="app_name">Gregario Karoo</string>
+    <string name="extension_name">Gregario</string>
 
-    <string name="ruta_oscura_name">1B · Ruta (oscuro)</string>
-    <string name="ruta_oscura_desc">Velocidad y media, potencia con zona y normalizada, pulso con zona, pendiente, distancia y desnivel. Fondo negro.</string>
-    <string name="ruta_clara_name">1C · Ruta (claro)</string>
-    <string name="ruta_clara_desc">Velocidad y media, potencia con zona y normalizada, pulso con zona, pendiente, distancia y desnivel. Fondo claro, para pleno sol.</string>
-    <string name="velocidad_oscura_name">2B · Velocidad y tiempo (oscuro)</string>
-    <string name="velocidad_oscura_desc">Velocidad, media y máxima, distancia total y de vuelta, tiempo en movimiento y total, distancia a destino y hora de llegada. Fondo negro.</string>
-    <string name="velocidad_clara_name">2C · Velocidad y tiempo (claro)</string>
-    <string name="velocidad_clara_desc">Velocidad, media y máxima, distancia total y de vuelta, tiempo en movimiento y total, distancia a destino y hora de llegada. Fondo claro, para pleno sol.</string>
-    <string name="potencia_oscura_name">3B · Potencia a fondo (oscuro)</string>
-    <string name="potencia_oscura_desc">Potencia 3 s con zona y límites, W/kg, 10 s, 30 s, vuelta, normalizada, media, máxima, IF, TSS y kJ. Fondo negro.</string>
-    <string name="potencia_clara_name">3C · Potencia a fondo (claro)</string>
-    <string name="potencia_clara_desc">Potencia 3 s con zona y límites, W/kg, 10 s, 30 s, vuelta, normalizada, media, máxima, IF, TSS y kJ. Fondo claro, para pleno sol.</string>
-    <string name="pulso_oscura_name">4B · Pulso a fondo (oscuro)</string>
-    <string name="pulso_oscura_desc">Pulso con zona, % de FC máxima, media, máxima, vuelta, tiempo en zona, Z4+, deriva y tiempo en cada zona. Fondo negro.</string>
-    <string name="pulso_clara_name">4C · Pulso a fondo (claro)</string>
-    <string name="pulso_clara_desc">Pulso con zona, % de FC máxima, media, máxima, vuelta, tiempo en zona, Z4+, deriva y tiempo en cada zona. Fondo claro, para pleno sol.</string>
-    <string name="subida_oscura_name">5B · Subida (Climber) (oscuro)</string>
-    <string name="subida_oscura_desc">Perfil del puerto actual de la ruta, pendiente, VAM, distancia y desnivel que quedan, tiempo a cima, potencia, W/kg y pulso. Fondo negro.</string>
-    <string name="subida_clara_name">5C · Subida (Climber) (claro)</string>
-    <string name="subida_clara_desc">Perfil del puerto actual de la ruta, pendiente, VAM, distancia y desnivel que quedan, tiempo a cima, potencia, W/kg y pulso. Fondo claro, para pleno sol.</string>
+    <string name="ruta_name">1 · Ruta</string>
+    <string name="ruta_desc">Velocidad y media, potencia con zona y normalizada, pulso con zona, pendiente, distancia y viento relativo a tu marcha.</string>
+    <string name="velocidad_name">2 · Velocidad y tiempo</string>
+    <string name="velocidad_desc">Velocidad, media y máxima, distancia total y de vuelta, tiempo en movimiento y total, distancia a destino y hora de llegada.</string>
+    <string name="potencia_name">3 · Potencia a fondo</string>
+    <string name="potencia_desc">Potencia 3 s con zona y límites, W/kg, 10 s, 30 s, vuelta, normalizada, media, máxima, IF, TSS y kJ.</string>
+    <string name="pulso_name">4 · Pulso a fondo</string>
+    <string name="pulso_desc">Pulso con zona, % de FC máxima, media, máxima, vuelta, tiempo en zona, Z4+, deriva y tiempo en cada zona.</string>
+    <string name="subida_name">5 · Subida (Climber)</string>
+    <string name="subida_desc">Perfil del puerto actual de la ruta, pendiente, VAM, distancia y desnivel que quedan, tiempo a cima, potencia, W/kg y pulso.</string>
+    <string name="entreno_name">6 · Entreno</string>
+    <string name="entreno_desc">Entreno estructurado en curso: potencia frente al objetivo del paso con barra de rango, cuenta atrás del paso, cadencia frente a su objetivo, paso n de N, tiempo que queda y viento.</string>
+    <string name="tiempo_name">7 · Tiempo</string>
+    <string name="tiempo_desc">Viento relativo a tu marcha (de cara, lateral o a favor) con flecha, rachas, temperatura, lluvia en la próxima hora y hora de la previsión.</string>
+    <string name="plan_ruta_name">8 · Ruta prevista</string>
+    <string name="plan_ruta_desc">Ruta cargada en miniatura coloreada por el viento que tendrás al pasar, hora de llegada y seis puntos de control con hora de paso, temperatura, lluvia y viento. El paso se calcula con tu potencia, tu peso y la pendiente.</string>
+    <string name="viento_name">Viento (campo pequeño)</string>
+    <string name="viento_desc">Flecha del viento relativa a tu marcha, km/h y si es de cara, lateral o a favor. Para la página del mapa.</string>
+    <string name="velocidad_distancia_name">Velocidad + distancia (campo pequeño)</string>
+    <string name="velocidad_distancia_desc">Velocidad actual y distancia en un solo campo. Para la página del mapa.</string>
 
-    <string name="main_text">Karoo Pantallas está instalada.\n\nPara usarla:\n1. Ve a Perfiles y elige uno.\n2. Añade una página nueva con un solo campo.\n3. Toca el campo, entra en «Pantallas» y elige la pantalla: 1B/1C Ruta, 2B/2C Velocidad, 3B/3C Potencia, 4B/4C Pulso o 5B/5C Subida (B = oscuro, C = claro).\n\nLas zonas de potencia y pulso salen de tu perfil del Karoo. La pantalla de subida necesita una ruta cargada con puertos.</string>
+    <string name="main_text">1. Ve a Perfiles y elige uno.\n2. Añade una página nueva con un solo campo.\n3. Toca el campo, entra en «Gregario» y elige: 1 Ruta, 2 Velocidad, 3 Potencia, 4 Pulso, 5 Subida, 6 Entreno, 7 Tiempo u 8 Ruta prevista.\n4. En la página del mapa, toca uno de sus campos de datos y elige en «Gregario» los campos pequeños «Viento» o «Velocidad + distancia».\n\nEl color (automático, oscuro o claro) se elige arriba y vale para todas. Las zonas, el peso y el FTP salen de tu perfil del Karoo. La pantalla de subida necesita una ruta con puertos y la de entreno, un entreno estructurado en marcha.\n\nLos avisos de comer y beber salen solos mientras grabas, aunque no tengas ninguna pantalla de la app a la vista.</string>
+
+    <string name="aviso_comer">Toca comer</string>
+    <string name="aviso_beber">Toca beber</string>
 </resources>

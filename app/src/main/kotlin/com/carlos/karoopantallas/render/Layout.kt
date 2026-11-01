@@ -2,6 +2,8 @@ package com.carlos.karoopantallas.render
 
 import com.carlos.karoopantallas.data.Fmt
 import com.carlos.karoopantallas.data.Snapshot
+import com.carlos.karoopantallas.data.WeatherState
+import com.carlos.karoopantallas.data.WindSide
 import com.carlos.karoopantallas.render.Painter.A
 import io.hammerhead.karooext.models.UserProfile
 import kotlin.math.max
@@ -11,6 +13,11 @@ interface Layout {
     val types: List<String>
     /** Si necesita el estado de navegación (perfil de la ruta y puertos) */
     val navigation: Boolean get() = false
+    /**
+     * Campo pequeño (para la página del mapa u otras con varios campos): se dibuja en píxeles reales
+     * ([Painter.wPx] × [Painter.hPx]) en vez de en el lienzo de diseño 480 × 620.
+     */
+    val compact: Boolean get() = false
     fun draw(p: Painter, s: Snapshot, pal: Palette)
 }
 
@@ -58,6 +65,20 @@ internal object Common {
         if (zone != null) p.txt(zone, x + w + gap, zoneBase, zoneSize, zoneColor)
         p.txt(unit, x + w + gap, unitBase, unitSize, unitColor)
         return x + w + gap + colW
+    }
+
+    /** Color del viento: de cara rojo, lateral amarillo, a favor verde; sin rumbo, el de texto. */
+    fun windColor(w: WeatherState, pal: Palette): Int = when (w.side) {
+        WindSide.HEAD -> pal.zone(4)
+        WindSide.TAIL -> pal.lime
+        WindSide.CROSS_L, WindSide.CROSS_R -> pal.zone(2)
+        null -> pal.text
+    }
+
+    /** Flecha del viento relativa a tu marcha (o absoluta respecto al norte si aún no hay rumbo). */
+    fun windArrow(p: Painter, w: WeatherState, pal: Palette, cx: Float, cy: Float, size: Float) {
+        val deg = w.arrowDeg ?: w.windFrom?.let { (it + 180) % 360 } ?: return
+        p.arrow(cx, cy, size, deg.toFloat(), windColor(w, pal))
     }
 
     fun int(v: Double?) = Fmt.int(v)

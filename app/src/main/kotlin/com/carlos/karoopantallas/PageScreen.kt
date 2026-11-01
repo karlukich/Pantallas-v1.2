@@ -4,6 +4,9 @@ import android.content.Context
 import android.widget.RemoteViews
 import com.carlos.karoopantallas.data.RideTracker
 import com.carlos.karoopantallas.data.Snapshot
+import com.carlos.karoopantallas.data.RouteForecast
+import com.carlos.karoopantallas.data.Theme
+import com.carlos.karoopantallas.data.Weather
 import com.carlos.karoopantallas.data.consumerFlow
 import com.carlos.karoopantallas.data.dataPoints
 import com.carlos.karoopantallas.data.streamDataFlow
@@ -27,7 +30,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -37,7 +42,7 @@ import timber.log.Timber
 
 /**
  * Un campo gráfico que ocupa una página entera. [layout] decide qué datos pide y cómo se dibuja;
- * [palette] elige el modo oscuro (B) o claro (C). Se redibuja una vez por segundo,
+ * El color (oscuro, claro o automático) sale del ajuste global, ver [Theme]. Se redibuja una vez por segundo,
  * que es el máximo que admite el Karoo para las vistas de extensiones.
  */
 @OptIn(FlowPreview::class)
@@ -45,9 +50,10 @@ class PageScreen(
     private val karoo: KarooSystemService,
     extension: String,
     typeId: String,
-    private val palette: Palette,
     private val layout: Layout,
 ) : DataTypeImpl(extension, typeId) {
+
+    private fun palette(context: Context): Palette = if (Theme.isDark(context)) Palette.DARK else Palette.LIGHT
 
     /** Un campo gráfico también necesita un valor numérico; emitimos el tiempo para que figure como activo. */
     override fun startStream(emitter: Emitter<StreamState>) {
@@ -62,7 +68,7 @@ class PageScreen(
     }
 
     override fun startView(context: Context, config: ViewConfig, emitter: ViewEmitter) {
-        // Ocupamos todo el campo, sin la cabecera estándar del Karoo
+        // Ocupamos todo el campo, sin la cabecera estándar del Karoo (los campos compactos pintan su rótulo)
         emitter.onNext(UpdateGraphicConfig(showHeader = false))
 
         val painter = Painter(context)
@@ -85,13 +91,16 @@ class PageScreen(
                 .map<RideState, RideState?> { it }
                 .onStart { emit(null) }
 
-            combine(points, profile, navigation, ride) { p, prof, nav, rs ->
-                Snapshot(p, prof, rs, nav, RideTracker.state())
+            // Latido de 1 s: redibuja aunque no cambie ningún dato (previsión, color automático, parado)
+            val tick = flow { while (true) { emit(Unit); delay(1000) } }
+            combine(points, profile, navigation, ride, tick) { p, prof, nav, rs, _ ->
+                Snapshot(p, prof, rs, nav, RideTracker.state(), Weather.current(), RouteForecast.current())
             }
                 .sample(1000)
                 .collect { snap ->
                     try {
-                        val bmp = painter.begin(w, h, palette.bg)
+                        val palette = palette(context)
+                        val bmp = if (layout.compact) painter.beginPx(w, h, palette.bg) else painter.begin(w, h, palette.bg)
                         layout.draw(painter, snap, palette)
                         val views = RemoteViews(context.packageName, R.layout.pantalla)
                         views.setImageViewBitmap(R.id.imagen, bmp)

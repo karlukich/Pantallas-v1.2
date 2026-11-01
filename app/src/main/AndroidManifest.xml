@@ -34,6 +34,6 @@
              Cambia TU_USUARIO por tu usuario de GitHub si publicas el proyecto allí. -->
         <meta-data
             android:name="io.hammerhead.karooext.MANIFEST_URL"
-            android:value="https://github.com/TU_USUARIO/KarooPantallas/releases/latest/download/manifest.json" />
+            android:value="https://github.com/TU_USUARIO/GregarioKaroo/releases/latest/download/manifest.json" />
     </application>
 </manifest>

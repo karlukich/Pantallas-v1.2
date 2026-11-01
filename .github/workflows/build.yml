@@ -22,17 +22,17 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew app:assembleRelease
-          cp app/build/outputs/apk/release/app-release.apk karoo-pantallas.apk
+          cp app/build/outputs/apk/release/app-release.apk gregario-karoo.apk
       - name: Guardar APK como artefacto
         uses: actions/upload-artifact@v4
         with:
-          name: karoo-pantallas
-          path: karoo-pantallas.apk
+          name: gregario-karoo
+          path: gregario-karoo.apk
       - name: Publicar release (enlace fijo para el Karoo)
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ github.run_number }}
           make_latest: true
           files: |
-            karoo-pantallas.apk
+            gregario-karoo.apk
             app/manifest.json

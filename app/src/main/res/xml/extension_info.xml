@@ -1,67 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Los typeId terminan en "-oscura" por compatibilidad con las páginas creadas con la v1.2 (pantallas B). -->
 <ExtensionInfo
     id="pantallas"
     displayName="@string/extension_name"
     icon="@drawable/ic_app"
-    scansDevices="false">
+    scansDevices="false"
+    mapLayer="true">
     <DataType
         typeId="ruta-oscura"
-        displayName="@string/ruta_oscura_name"
-        description="@string/ruta_oscura_desc"
+        displayName="@string/ruta_name"
+        description="@string/ruta_desc"
         graphical="true"
         icon="@drawable/ic_ruta" />
     <DataType
-        typeId="ruta-clara"
-        displayName="@string/ruta_clara_name"
-        description="@string/ruta_clara_desc"
-        graphical="true"
-        icon="@drawable/ic_ruta_claro" />
-    <DataType
         typeId="velocidad-oscura"
-        displayName="@string/velocidad_oscura_name"
-        description="@string/velocidad_oscura_desc"
-        graphical="true"
-        icon="@drawable/ic_velocidad" />
-    <DataType
-        typeId="velocidad-clara"
-        displayName="@string/velocidad_clara_name"
-        description="@string/velocidad_clara_desc"
+        displayName="@string/velocidad_name"
+        description="@string/velocidad_desc"
         graphical="true"
         icon="@drawable/ic_velocidad" />
     <DataType
         typeId="potencia-oscura"
-        displayName="@string/potencia_oscura_name"
-        description="@string/potencia_oscura_desc"
-        graphical="true"
-        icon="@drawable/ic_potencia" />
-    <DataType
-        typeId="potencia-clara"
-        displayName="@string/potencia_clara_name"
-        description="@string/potencia_clara_desc"
+        displayName="@string/potencia_name"
+        description="@string/potencia_desc"
         graphical="true"
         icon="@drawable/ic_potencia" />
     <DataType
         typeId="pulso-oscura"
-        displayName="@string/pulso_oscura_name"
-        description="@string/pulso_oscura_desc"
-        graphical="true"
-        icon="@drawable/ic_pulso" />
-    <DataType
-        typeId="pulso-clara"
-        displayName="@string/pulso_clara_name"
-        description="@string/pulso_clara_desc"
+        displayName="@string/pulso_name"
+        description="@string/pulso_desc"
         graphical="true"
         icon="@drawable/ic_pulso" />
     <DataType
         typeId="subida-oscura"
-        displayName="@string/subida_oscura_name"
-        description="@string/subida_oscura_desc"
+        displayName="@string/subida_name"
+        description="@string/subida_desc"
         graphical="true"
         icon="@drawable/ic_subida" />
     <DataType
-        typeId="subida-clara"
-        displayName="@string/subida_clara_name"
-        description="@string/subida_clara_desc"
+        typeId="entreno-oscura"
+        displayName="@string/entreno_name"
+        description="@string/entreno_desc"
         graphical="true"
-        icon="@drawable/ic_subida" />
+        icon="@drawable/ic_entreno" />
+    <DataType
+        typeId="tiempo-oscura"
+        displayName="@string/tiempo_name"
+        description="@string/tiempo_desc"
+        graphical="true"
+        icon="@drawable/ic_tiempo" />
+    <DataType
+        typeId="plan-ruta-oscura"
+        displayName="@string/plan_ruta_name"
+        description="@string/plan_ruta_desc"
+        graphical="true"
+        icon="@drawable/ic_ruta" />
+    <!-- Campos pequeños para la página del mapa -->
+    <DataType
+        typeId="viento"
+        displayName="@string/viento_name"
+        description="@string/viento_desc"
+        graphical="true"
+        icon="@drawable/ic_tiempo" />
+    <DataType
+        typeId="velocidad-distancia"
+        displayName="@string/velocidad_distancia_name"
+        description="@string/velocidad_distancia_desc"
+        graphical="true"
+        icon="@drawable/ic_velocidad_distancia" />
 </ExtensionInfo>

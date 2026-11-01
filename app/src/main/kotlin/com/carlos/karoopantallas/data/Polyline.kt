@@ -36,4 +36,29 @@ object Polyline {
         }
         return out
     }
+
+    /** Codifica pares (lat, lng) en una polilínea de Google (precisión 5, la que pide el mapa del Karoo). */
+    fun encode(points: List<Pair<Double, Double>>, precision: Int = 5): String {
+        val factor = Math.pow(10.0, precision.toDouble())
+        val sb = StringBuilder()
+        var pa = 0L
+        var pb = 0L
+        fun put(v: Long) {
+            var x = if (v < 0) (v shl 1).inv() else v shl 1
+            while (x >= 0x20) {
+                sb.append(((0x20 or (x and 0x1f).toInt()) + 63).toChar())
+                x = x shr 5
+            }
+            sb.append((x + 63).toInt().toChar())
+        }
+        for ((a, b) in points) {
+            val ia = Math.round(a * factor)
+            val ib = Math.round(b * factor)
+            put(ia - pa)
+            put(ib - pb)
+            pa = ia
+            pb = ib
+        }
+        return sb.toString()
+    }
 }

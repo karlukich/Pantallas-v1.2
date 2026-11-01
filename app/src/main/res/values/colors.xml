@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Avisos de comer y beber durante la salida -->
+    <color name="aviso_comer_fondo">#C8F03C</color>
+    <color name="aviso_beber_fondo">#6FA8FF</color>
+    <color name="aviso_texto">#0C0F13</color>
+</resources>
