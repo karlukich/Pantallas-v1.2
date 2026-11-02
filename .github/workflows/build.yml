@@ -23,6 +23,9 @@ jobs:
           chmod +x gradlew
           ./gradlew app:assembleRelease
           cp app/build/outputs/apk/release/app-release.apk gregario-karoo.apk
+          # el Karoo descarga el APK desde latestApkUrl: siempre apunta a la última release de este repo
+          sed -i "s#\"latestApkUrl\": *\"[^\"]*\"#\"latestApkUrl\": \"https://github.com/${{ github.repository }}/releases/latest/download/gregario-karoo.apk\"#" app/manifest.json
+          grep latestApkUrl app/manifest.json
       - name: Guardar APK como artefacto
         uses: actions/upload-artifact@v4
         with:
