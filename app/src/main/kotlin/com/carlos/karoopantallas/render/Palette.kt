@@ -3,7 +3,7 @@ package com.carlos.karoopantallas.render
 import android.graphics.Color
 
 /**
- * Colores de las pantallas. B = fondo negro, C = fondo claro (con la versión oscura de cada
+ * Colores de las pantallas. B = fondo negro, C = fondo blanco (con la versión oscura de cada
  * color para que se lea al sol). Mismos valores que las maquetas del lienzo.
  */
 class Palette(
@@ -55,7 +55,7 @@ class Palette(
         )
 
         val LIGHT = Palette(
-            bg = c("#F4F2EC"),
+            bg = c("#FFFFFF"),
             text = c("#0C0F13"),
             label = c("#1A2028"),
             unit = c("#4A525C"),

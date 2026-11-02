@@ -7,20 +7,20 @@ import com.carlos.karoopantallas.render.Painter.A
 import io.hammerhead.karooext.models.DataType.Type
 import kotlin.math.max
 
-/** 1B / 1C · Ruta: velocidad, potencia con zona, pulso, pendiente, distancia y desnivel. */
+/** 1 · Ruta: velocidad, potencia con zona, pulso, pendiente, distancia y viento. */
 object RutaLayout : Layout {
     override val types = listOf(
         Type.SPEED, Type.AVERAGE_SPEED,
         Type.SMOOTHED_3S_AVERAGE_POWER, Type.NORMALIZED_POWER,
         Type.HEART_RATE, Type.ELEVATION_GRADE,
-        Type.DISTANCE, Type.ELEVATION_GAIN,
+        Type.DISTANCE,
     )
 
     override fun draw(p: Painter, s: Snapshot, pal: Palette) {
         speed(p, s, pal)
         power(p, s, pal)
         hrAndGrade(p, s, pal)
-        distanceAndElevation(p, s, pal)
+        distanceAndWind(p, s, pal)
     }
 
     /** 0–165: velocidad estirada con km/h arriba a su derecha; media abajo a la derecha. */
@@ -89,16 +89,18 @@ object RutaLayout : Layout {
         }
     }
 
-    /** 470–620: distancia con 2 decimales (a mitad de tamaño) y desnivel acumulado. */
-    private fun distanceAndElevation(p: Painter, s: Snapshot, pal: Palette) {
+    /** 470–620: distancia con 2 decimales (a mitad de tamaño) y viento relativo a tu marcha. */
+    private fun distanceAndWind(p: Painter, s: Snapshot, pal: Palette) {
         val lw = p.txt("DISTANCIA ", 18f, 498.6f, 22f, pal.label)
         p.txt(s.distUnit, 18f + lw, 498.6f, 22f, pal.unit)
         p.numDec(Fmt.dec2(s.dist(s.v(Type.DISTANCE))), 18f, 595.9f, 88f, pal.text, maxW = 225f)
 
-        p.txt("DESNIVEL +", R, 498.6f, 22f, pal.label, A.R)
-        p.numDec(
-            Fmt.int(s.elev(s.v(Type.ELEVATION_GAIN))), R, 595.9f, 88f, pal.text, A.R,
-            unit = s.elevUnit, unitSize = 24f, unitColor = pal.unit, unitGap = 6f, maxW = R - 258f,
-        )
+        val w = s.weather
+        val color = Common.windColor(w, pal)
+        p.txt("VIENTO", R, 498.6f, 22f, pal.label, A.R)
+        val speed = Fmt.int(w.windKmh)
+        val nw = p.num(speed, R, 580f, p.fitNum(speed, 76f, 95f), if (w.hasWind) color else pal.text, A.R)
+        if (w.hasWind) Common.windArrow(p, w, pal, R - nw - 34f, 553f, 54f)
+        p.txt(w.side?.label ?: "km/h", R, 609f, 18f, if (w.side != null) color else pal.unit, A.R)
     }
 }

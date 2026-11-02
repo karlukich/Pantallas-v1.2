@@ -17,6 +17,8 @@ class Snapshot(
     val rideState: RideState?,
     val navigation: NavigationState?,
     val tracker: TrackerState = TrackerState.EMPTY,
+    val weather: WeatherState = WeatherState.EMPTY,
+    val route: RouteState = RouteState.EMPTY,
 ) {
     /**
      * Valor de un tipo de dato. Si se indica campo se usa ese (o el único valor, si solo hay uno);

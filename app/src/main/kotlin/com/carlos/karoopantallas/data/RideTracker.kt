@@ -35,8 +35,6 @@ data class TrackerState(
  * Se pone a cero al empezar una salida nueva.
  */
 object RideTracker {
-    private const val MIN_DRIFT_SECONDS = 20 * 60
-
     private var job: Job? = null
     private val lock = Any()
 
@@ -126,7 +124,7 @@ object RideTracker {
     }
 
     private fun drift(): Double? {
-        if (samples < MIN_DRIFT_SECONDS) return null
+        if (samples < Settings.driftMinutes.value * 60) return null
         val half = samples / 2
         fun ef(from: Int, to: Int): Double? {
             var p = 0.0

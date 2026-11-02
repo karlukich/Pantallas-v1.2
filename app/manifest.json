@@ -1,10 +1,10 @@
 {
-  "label": "Karoo Pantallas",
+  "label": "Gregario Karoo",
   "packageName": "com.carlos.karoopantallas",
-  "latestApkUrl": "https://github.com/TU_USUARIO/KarooPantallas/releases/latest/download/karoo-pantallas.apk",
-  "latestVersion": "1.2",
-  "latestVersionCode": 3,
+  "latestApkUrl": "https://github.com/karlukich/Pantallas-v1.2/releases/latest/download/gregario-karoo.apk",
+  "latestVersion": "1.9",
+  "latestVersionCode": 10,
   "developer": "Carlos Castillo",
-  "description": "Pantallas de datos a página completa en modo oscuro y claro: ruta, velocidad y tiempo, potencia, pulso y subida (Climber).",
-  "releaseNotes": "Diez pantallas: 1B/1C a 5B/5C."
+  "description": "Siete pantallas de datos a página completa (ruta, velocidad y tiempo, potencia, pulso, subida, entreno y tiempo), campos pequeños para el mapa, color automático y avisos de comer, beber y lluvia.",
+  "releaseNotes": "Ahora se llama Gregario Karoo. En el selector de campos aparece como «Gregario». Las páginas que ya tenías configuradas siguen funcionando."
 }

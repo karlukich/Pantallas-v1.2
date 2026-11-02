@@ -42,12 +42,48 @@ class Painter(context: Context) {
     lateinit var c: Canvas
         private set
 
+    /** Tamaño real del campo en píxeles (para los campos compactos). */
+    var wPx = 1f
+        private set
+    var hPx = 1f
+        private set
+
     fun begin(widthPx: Int, heightPx: Int, bg: Int): Bitmap {
+        val bmp = beginPx(widthPx, heightPx, bg)
+        c.scale(widthPx / W, heightPx / H)
+        return bmp
+    }
+
+    /** Como [begin] pero sin escalar: se dibuja en píxeles reales. */
+    fun beginPx(widthPx: Int, heightPx: Int, bg: Int): Bitmap {
         val bmp = Bitmap.createBitmap(max(1, widthPx), max(1, heightPx), Bitmap.Config.RGB_565)
         c = Canvas(bmp)
         c.drawColor(bg)
-        c.scale(widthPx / W, heightPx / H)
+        wPx = max(1, widthPx).toFloat()
+        hPx = max(1, heightPx).toFloat()
         return bmp
+    }
+
+    /**
+     * Flecha gruesa de lado [size] centrada en ([cx], [cy]), girada [deg] grados en sentido horario
+     * (0 = hacia arriba).
+     */
+    fun arrow(cx: Float, cy: Float, size: Float, deg: Float, color: Int) {
+        val s = size
+        val p = Path().apply {
+            moveTo(cx, cy - 0.5f * s)
+            lineTo(cx + 0.42f * s, cy - 0.02f * s)
+            lineTo(cx + 0.15f * s, cy - 0.02f * s)
+            lineTo(cx + 0.15f * s, cy + 0.5f * s)
+            lineTo(cx - 0.15f * s, cy + 0.5f * s)
+            lineTo(cx - 0.15f * s, cy - 0.02f * s)
+            lineTo(cx - 0.42f * s, cy - 0.02f * s)
+            close()
+        }
+        c.save()
+        c.rotate(deg, cx, cy)
+        path(p, color)
+        c.restore()
     }
 
     // ---------- Medidas ----------
