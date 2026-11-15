@@ -4,7 +4,7 @@ Extensión para Hammerhead Karoo con diez pantallas de datos a página completa,
 
 | Campo en el Karoo | Qué muestra |
 |---|---|
-| **1 · Ruta** | Velocidad y media, potencia 3 s con zona y barra dentro de la zona, NORM, pulso con zona, pendiente coloreada, distancia, desnivel y viento relativo a tu marcha |
+| **1 · Ruta** | Velocidad y media, stamina actual con barra, potencia 3 s con zona y barra dentro de la zona, NORM, pulso con zona, pendiente coloreada, distancia, desnivel y viento relativo a tu marcha |
 | **2 · Velocidad y tiempo** | Velocidad, media y máxima, distancia total y de la vuelta, tiempo en movimiento y total, distancia a destino y hora de llegada |
 | **3 · Potencia a fondo** | Potencia 3 s con zona y límites, W/kg, 10 s, 30 s, vuelta, NORM, media, IF, TSS y reparto del tiempo por zonas de potencia |
 | **4 · Pulso a fondo** | Pulso con zona y límites, % FC máx., media, máxima, vuelta, tiempo seguido en la zona, tiempo en Z4 o más, deriva y reparto del tiempo por zonas |

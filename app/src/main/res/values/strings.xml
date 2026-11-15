@@ -4,7 +4,7 @@
     <string name="extension_name">Gregario</string>
 
     <string name="ruta_name">1 · Ruta</string>
-    <string name="ruta_desc">Velocidad y media, potencia con zona y normalizada, pulso con zona, pendiente, distancia, desnivel y viento relativo a tu marcha.</string>
+    <string name="ruta_desc">Velocidad y media, stamina, potencia con zona y normalizada, pulso con zona, pendiente, distancia, desnivel y viento relativo a tu marcha.</string>
     <string name="velocidad_name">2 · Velocidad y tiempo</string>
     <string name="velocidad_desc">Velocidad, media y máxima, distancia total y de vuelta, tiempo en movimiento y total, distancia a destino y hora de llegada.</string>
     <string name="potencia_name">3 · Potencia a fondo</string>

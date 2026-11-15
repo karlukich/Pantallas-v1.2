@@ -6,8 +6,9 @@ import com.carlos.karoopantallas.render.Common.R
 import com.carlos.karoopantallas.render.Painter.A
 import io.hammerhead.karooext.models.DataType.Type
 import kotlin.math.max
+import kotlin.math.roundToInt
 
-/** 1 · Ruta: velocidad, potencia con zona, pulso, pendiente, distancia, desnivel y viento. */
+/** 1 · Ruta: velocidad, stamina, potencia con zona, pulso, pendiente, distancia, desnivel y viento. */
 object RutaLayout : Layout {
     override val types = listOf(
         Type.SPEED, Type.AVERAGE_SPEED,
@@ -39,6 +40,27 @@ object RutaLayout : Layout {
         val pivot = 150.2f + 0.05f * size
         val top = pivot - (pivot - (150.2f - Painter.CAP * size)) * 1.23f
         p.txt(unit, 18f + w + 8f, top + Painter.CAP * 24f, 24f, pal.unit)
+        stamina(p, s, pal)
+    }
+
+    /**
+     * Arriba a la derecha (encima de MEDIA): stamina actual en % y barra fina con la raya de la potencial,
+     * coloreadas según el nivel, como en la pantalla 9.
+     */
+    private fun stamina(p: Painter, s: Snapshot, pal: Palette) {
+        val st = s.stamina
+        val cur = st.current ?: return
+        val color = StaminaLayout.level(cur, pal)
+        // A la derecha del km/h (que como mucho llega a ~300) y por encima de su parte de arriba
+        val left = 320f
+        val pw = p.txt("%", R, 25f, 16f, color, A.R)
+        val vw = p.num("${cur.roundToInt()}", R - pw - 3f, 25f, 30f, color, A.R)
+        p.txt("STAMINA", R - pw - 3f - vw - 7f, 25f, 16f, pal.unit, A.R)
+        p.bar(left, 34f, R, 44f, cur / 100, pal.track, color)
+        st.potential?.let {
+            val x = left + (R - left) * (it / 100).toFloat().coerceIn(0f, 1f)
+            p.rect(x - 1.5f, 31f, x + 1.5f, 47f, pal.text)
+        }
     }
 
     /** 165–320: franja y barra de zona, cifra en color de zona con Zx / W; NORM a la derecha. */
