@@ -83,11 +83,11 @@ object Settings {
     // ---------- Tiempo ----------
     val weatherOn = BoolSetting(
         "tiempo", "Previsión del tiempo", true,
-        "Viento, temperatura y lluvia de Open-Meteo para tu posición, cada 15 min o 5 km. Usa el wifi o el móvil (Companion).",
+        "Viento (a la altura de la bici), temperatura y lluvia de Open-Meteo para tu posición, cada 15 min o 5 km. Es una previsión, no viento medido. Usa el wifi o el móvil (Companion).",
     )
     val windMap = BoolSetting(
         "tiempo_mapa", "Viento en el mapa", true,
-        "Colorea la ruta cargada: rojo con viento de cara, ámbar lateral y verde a favor. Solo con viento de 8 km/h o más.",
+        "Colorea la ruta cargada: rojo con viento de cara, ámbar lateral y verde a favor. Solo con viento de 5 km/h o más a la altura de la bici.",
     )
     val rainAlert = BoolSetting("tiempo_lluvia", "Aviso de lluvia", true, "Avisa si la probabilidad de lluvia en la próxima hora pasa del 60 %.")
 
@@ -99,6 +99,12 @@ object Settings {
     )
     val bikeKg = IntSetting("bici_kg", "Peso de la bici y bolsas", "kg", 10, 6, 25, 1, "Se suma a tu peso del perfil del Karoo.")
 
+    // ---------- Stamina ----------
+    val wPrime = IntSetting(
+        "w_prima", "W' (reserva por encima del FTP)", "kJ", 20, 8, 40, 1,
+        "Energía que puedes gastar por encima del FTP antes de agotarte. Si usas intervals.icu, copia el W' de tu curva de potencia.",
+    )
+
     // ---------- Pulso ----------
     val driftMinutes = IntSetting("deriva_min", "Deriva a partir de", "min", 20, 10, 60, 5, "Minutos grabados antes de mostrar la deriva pulso/potencia.")
 
@@ -109,6 +115,7 @@ object Settings {
         "COMER Y BEBER" to listOf(fuelOn, fuelPortion, fuelMax, fuelStart, drinkOn, drinkEvery),
         "TIEMPO" to listOf(weatherOn, windMap, rainAlert),
         "BICI" to listOf(bikeType, bikeKg),
+        "STAMINA" to listOf(wPrime),
         "PULSO" to listOf(driftMinutes),
     )
 }

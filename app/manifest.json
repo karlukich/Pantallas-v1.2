@@ -2,9 +2,9 @@
   "label": "Gregario Karoo",
   "packageName": "com.carlos.karoopantallas",
   "latestApkUrl": "https://github.com/karlukich/Pantallas-v1.2/releases/latest/download/gregario-karoo.apk",
-  "latestVersion": "1.9",
-  "latestVersionCode": 10,
+  "latestVersion": "1.10",
+  "latestVersionCode": 11,
   "developer": "Carlos Castillo",
-  "description": "Siete pantallas de datos a página completa (ruta, velocidad y tiempo, potencia, pulso, subida, entreno y tiempo), campos pequeños para el mapa, color automático y avisos de comer, beber y lluvia.",
-  "releaseNotes": "Ahora se llama Gregario Karoo. En el selector de campos aparece como «Gregario». Las páginas que ya tenías configuradas siguen funcionando."
+  "description": "Nueve pantallas de datos a página completa (ruta, velocidad y tiempo, potencia, pulso, subida, entreno, tiempo, ruta prevista y stamina), campos pequeños para el mapa, color automático y avisos de comer, beber y lluvia.",
+  "releaseNotes": "Nueva pantalla 9 · Stamina con recomendaciones. Viento corregido: velocidad a la altura de la bici, rumbo por GPS solo en marcha y dato viejo en gris con su hora."
 }

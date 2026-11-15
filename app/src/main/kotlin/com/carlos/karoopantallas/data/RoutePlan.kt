@@ -63,7 +63,8 @@ object RoutePlan {
     private const val G = 9.81
     private const val RHO = 1.2
     private const val EFF = 0.97
-    const val MIN_WIND_KMH = 8.0
+    /** Viento mínimo (a la altura de la bici) para considerarlo de cara / a favor */
+    const val MIN_WIND_KMH = 5.0
     const val CHECKPOINTS = 6
 
     /** Parámetros del ciclista y la bici. */

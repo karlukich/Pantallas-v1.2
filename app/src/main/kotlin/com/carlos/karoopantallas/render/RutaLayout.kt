@@ -101,6 +101,11 @@ object RutaLayout : Layout {
         val speed = Fmt.int(w.windKmh)
         val nw = p.num(speed, R, 580f, p.fitNum(speed, 76f, 95f), if (w.hasWind) color else pal.text, A.R)
         if (w.hasWind) Common.windArrow(p, w, pal, R - nw - 34f, 553f, 54f)
-        p.txt(w.side?.label ?: "km/h", R, 609f, 18f, if (w.side != null) color else pal.unit, A.R)
+        val sub = when {
+            w.hasWind && w.stale -> "DE LAS ${w.updated ?: "--:--"}"
+            w.side != null -> w.side!!.label
+            else -> "km/h"
+        }
+        p.txt(sub, R, 609f, 18f, if (w.side != null && !w.stale) color else pal.unit, A.R)
     }
 }

@@ -27,7 +27,7 @@ import kotlin.math.sqrt
 enum class WindSide(val label: String) { HEAD("DE CARA"), CROSS_L("LATERAL IZQ"), CROSS_R("LATERAL DCHA"), TAIL("A FAVOR") }
 
 data class WeatherState(
-    /** km/h a 10 m de altura (lo que da la previsión) */
+    /** km/h a la altura de la bici (la previsión da el viento a 10 m; ver [Weather.atRider]) */
     val windKmh: Double? = null,
     val gustKmh: Double? = null,
     /** Grados de donde VIENE el viento (0 = norte) */
@@ -39,10 +39,16 @@ data class WeatherState(
     val rainProb: Int? = null,
     /** Rumbo actual (0 = norte) */
     val heading: Double? = null,
-    /** Hora local de la última actualización, HH:mm */
+    /** Hora local de la última descarga correcta, HH:mm */
     val updated: String? = null,
+    /** Momento de la última descarga correcta (ms) */
+    val fetchedAtMs: Long? = null,
 ) {
     val hasWind get() = windKmh != null && windFrom != null
+
+    /** Dato de hace más de 30 min (sin conexión): se pinta en gris con su hora. */
+    val stale: Boolean
+        get() = fetchedAtMs == null || System.currentTimeMillis() - fetchedAtMs > Weather.STALE_MS
 
     /** Ángulo del viento respecto a tu rumbo: 0 = de cara, 180 = a favor, 90 = desde la derecha. */
     val relativeFrom: Double?
@@ -71,20 +77,38 @@ data class WeatherState(
 
 /**
  * Previsión de Open-Meteo (gratis y sin clave) para tu posición. La petición la hace el Karoo
- * por wifi o por el móvil (app Companion). Se actualiza cada 15 min o al moverte 5 km.
- * El rumbo sale del GPS (orientación del Karoo o, si no la da, de dos posiciones seguidas).
- * Si la probabilidad de lluvia de la próxima hora pasa del 60 %, avisa (como mucho una vez por hora).
+ * por wifi o por el móvil (app Companion). Se actualiza cada 15 min o al moverte 5 km; si falla,
+ * se reintenta a los 2 min. No es viento medido: es el modelo meteorológico para tu zona.
+ *
+ * - La previsión da el viento a 10 m de altura; a la altura de la bici es bastante menor, así que
+ *   se multiplica por [RIDER_FACTOR] (perfil logarítmico del viento con terreno abierto).
+ * - El rumbo sale de tu trazado GPS: dirección entre tu posición y la de hace al menos 50 m, solo
+ *   si vas a 8 km/h o más. Parado o muy lento se mantiene 30 s y luego queda sin rumbo («—»),
+ *   en vez de inventarse si el viento es de cara o a favor.
+ * - Si la probabilidad de lluvia de la próxima hora pasa del 60 %, avisa (como mucho una vez por hora).
  */
 object Weather {
     private const val REFRESH_MS = 15 * 60_000L
+    private const val RETRY_MS = 2 * 60_000L
     private const val REFRESH_KM = 5.0
+    const val STALE_MS = 30 * 60_000L
+
+    /** Viento a la altura de la bici ≈ 65 % del de 10 m. */
+    const val RIDER_FACTOR = 0.65
+    fun atRider(kmh: Double?): Double? = kmh?.let { it * RIDER_FACTOR }
+
+    private const val HEADING_MIN_M = 50.0
+    private const val HEADING_MIN_KMH = 8.0
+    private const val HEADING_HOLD_MS = 30_000L
+
+    private class Fix(val lat: Double, val lng: Double, val t: Long)
+    private val track = ArrayDeque<Fix>()
+    private var lastHeadingMs = 0L
 
     private var job: Job? = null
     @Volatile private var state = WeatherState.EMPTY
     @Volatile private var lat: Double? = null
     @Volatile private var lng: Double? = null
-    private var prevLat: Double? = null
-    private var prevLng: Double? = null
     private var lastFetchMs = 0L
     private var lastFetchLat = 0.0
     private var lastFetchLng = 0.0
@@ -99,10 +123,9 @@ object Weather {
         job = CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             launch {
                 karoo.consumerFlow<OnLocationChanged>().collect { loc ->
-                    val heading = loc.orientation ?: bearingFromPrevious(loc.lat, loc.lng)
                     lat = loc.lat
                     lng = loc.lng
-                    if (heading != null) state = state.copy(heading = heading)
+                    state = state.copy(heading = headingFromTrack(loc.lat, loc.lng, System.currentTimeMillis()))
                 }
             }
             while (isActive) {
@@ -117,21 +140,32 @@ object Weather {
         job = null
     }
 
-    /** Rumbo a partir de la posición anterior, solo si te has movido al menos 15 m. */
-    private fun bearingFromPrevious(la: Double, lo: Double): Double? {
-        val pla = prevLat
-        val plo = prevLng
-        if (pla == null || plo == null || distanceKm(pla, plo, la, lo) > 0.015) {
-            prevLat = la
-            prevLng = lo
+    /**
+     * Rumbo de marcha a partir del trazado: dirección desde la posición más reciente que esté a 50 m
+     * o más (de los últimos 60 s) hasta la actual, si en ese tramo ibas a 8 km/h o más.
+     */
+    internal fun headingFromTrack(la: Double, lo: Double, now: Long): Double? {
+        track.addLast(Fix(la, lo, now))
+        while (track.size > 2 && (now - track.first().t > 60_000 || track.size > 120)) track.removeFirst()
+        var ref: Fix? = null
+        for (i in track.indices.reversed()) {
+            val f = track[i]
+            if (distanceKm(f.lat, f.lng, la, lo) * 1000 >= HEADING_MIN_M) { ref = f; break }
         }
-        if (pla == null || plo == null || distanceKm(pla, plo, la, lo) < 0.015) return state.heading
-        val p1 = Math.toRadians(pla)
-        val p2 = Math.toRadians(la)
-        val dl = Math.toRadians(lo - plo)
-        val y = sin(dl) * cos(p2)
-        val x = cos(p1) * sin(p2) - sin(p1) * cos(p2) * cos(dl)
-        return (Math.toDegrees(atan2(y, x)) + 360) % 360
+        if (ref != null) {
+            val dtH = (now - ref.t) / 3_600_000.0
+            val kmh = if (dtH > 0) distanceKm(ref.lat, ref.lng, la, lo) / dtH else 0.0
+            if (kmh >= HEADING_MIN_KMH) {
+                lastHeadingMs = now
+                val p1 = Math.toRadians(ref.lat)
+                val p2 = Math.toRadians(la)
+                val dl = Math.toRadians(lo - ref.lng)
+                val y = sin(dl) * cos(p2)
+                val x = cos(p1) * sin(p2) - sin(p1) * cos(p2) * cos(dl)
+                return (Math.toDegrees(atan2(y, x)) + 360) % 360
+            }
+        }
+        return if (now - lastHeadingMs < HEADING_HOLD_MS) state.heading else null
     }
 
     private fun maybeFetch(karoo: KarooSystemService) {
@@ -154,6 +188,7 @@ object Weather {
             onError = { err ->
                 Timber.w("Tiempo: error $err")
                 inFlight = false
+                lastFetchMs = System.currentTimeMillis() - REFRESH_MS + RETRY_MS // reintento en 2 min
                 id?.let { karoo.removeConsumer(it) }
             },
         ) { event: OnHttpResponse ->
@@ -163,7 +198,7 @@ object Weather {
             val body = st.body
             if (st.statusCode != 200 || body == null) {
                 Timber.w("Tiempo: HTTP ${st.statusCode} ${st.error}")
-                lastFetchMs = System.currentTimeMillis() - REFRESH_MS + 2 * 60_000 // reintento en 2 min
+                lastFetchMs = System.currentTimeMillis() - REFRESH_MS + RETRY_MS // reintento en 2 min
                 return@addConsumer
             }
             try {
@@ -194,10 +229,13 @@ object Weather {
                 }
             }
         }
+        val now = System.currentTimeMillis()
         return WeatherState(
-            windKmh = d("wind_speed_10m"), gustKmh = d("wind_gusts_10m"), windFrom = d("wind_direction_10m"),
+            windKmh = atRider(d("wind_speed_10m")), gustKmh = atRider(d("wind_gusts_10m")), windFrom = d("wind_direction_10m"),
             tempC = d("temperature_2m"), precipMm = d("precipitation"), rainProb = prob,
-            heading = heading, updated = time.takeLast(5).takeIf { it.contains(':') },
+            heading = heading,
+            updated = java.text.SimpleDateFormat("HH:mm", java.util.Locale.US).format(java.util.Date(now)),
+            fetchedAtMs = now,
         )
     }
 

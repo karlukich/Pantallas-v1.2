@@ -128,7 +128,7 @@ object RutaPrevistaLayout : Layout {
                 else -> pal.text
             }
             p.num(rain?.let { "$it%" } ?: Fmt.NONE, 312f, base, 30f, rc, A.C)
-            val wc = if ((cp.windKmh ?: 0.0) >= 8.0) sideColor(cp.side, pal) else pal.text
+            val wc = if ((cp.windKmh ?: 0.0) >= com.carlos.karoopantallas.data.RoutePlan.MIN_WIND_KMH) sideColor(cp.side, pal) else pal.text
             val ww = p.num(Fmt.int(cp.windKmh), R, base, 30f, wc, A.R)
             cp.arrowDeg?.let { p.arrow(R - ww - 18f, base - 11f, 24f, it.toFloat(), wc) }
         }

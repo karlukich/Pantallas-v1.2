@@ -67,8 +67,8 @@ internal object Common {
         return x + w + gap + colW
     }
 
-    /** Color del viento: de cara rojo, lateral amarillo, a favor verde; sin rumbo, el de texto. */
-    fun windColor(w: WeatherState, pal: Palette): Int = when (w.side) {
+    /** Color del viento: de cara rojo, lateral amarillo, a favor verde; sin rumbo, el de texto; dato viejo, gris. */
+    fun windColor(w: WeatherState, pal: Palette): Int = if (w.stale) pal.unit else when (w.side) {
         WindSide.HEAD -> pal.zone(4)
         WindSide.TAIL -> pal.lime
         WindSide.CROSS_L, WindSide.CROSS_R -> pal.zone(2)

@@ -1,6 +1,6 @@
-# Gregario Karoo · v1.9
+# Gregario Karoo · v1.10
 
-Extensión para Hammerhead Karoo con ocho pantallas de datos a página completa, dos campos pequeños para la página del mapa y avisos de comer, beber y lluvia durante la salida.
+Extensión para Hammerhead Karoo con nueve pantallas de datos a página completa, dos campos pequeños para la página del mapa y avisos de comer, beber y lluvia durante la salida.
 
 | Campo en el Karoo | Qué muestra |
 |---|---|
@@ -11,6 +11,7 @@ Extensión para Hammerhead Karoo con ocho pantallas de datos a página completa,
 | **5 · Subida (Climber)** | Perfil del puerto actual coloreado por pendiente, puerto n de N, pendiente, VAM, lo que queda (km y m), tiempo a cima, potencia, W/kg y pulso |
 | **6 · Entreno** | Entreno estructurado en curso: potencia en verde/azul/rojo según el objetivo del paso, barra con el rango, cuenta atrás del paso, cadencia frente a su objetivo, paso n de N, tiempo que queda, pulso, potencia de la vuelta y viento |
 | **7 · Tiempo** | Viento relativo a tu marcha con flecha (de cara, lateral o a favor), km/h, rachas, efecto de cara o a favor, de dónde viene, temperatura, lluvia en la próxima hora y hora de la previsión |
+| **9 · Stamina** | Como en Garmin: stamina potencial (fondo, solo baja) y actual (reserva por encima del FTP), tiempo y km que te quedan a este ritmo, recomendación (afloja, no llegas, recupera, come, tienes margen), W' restante, potencia, % FTP de 5 min y evolución de la salida |
 | **8 · Ruta prevista** | Con una ruta cargada: miniatura coloreada por el viento que tendrás al pasar, km que quedan, hora de llegada y seis puntos de control con hora de paso, temperatura, lluvia y viento relativo |
 
 **Capa de viento en el mapa:** con una ruta cargada, colorea cada tramo según te dará el viento previsto: rojo de cara, ámbar lateral y verde a favor. Se quita sola sin ruta o con viento de menos de 8 km/h, y se puede desactivar en ajustes.
@@ -29,6 +30,7 @@ Extensión para Hammerhead Karoo con ocho pantallas de datos a página completa,
 | Comer y beber | Recordatorio de beber e intervalo base | Sí, 20 min |
 | Tiempo | Previsión del tiempo, viento en el mapa y aviso de lluvia (> 60 % en la próxima hora) | Sí, sí, sí |
 | Bici | Tipo (carretera o MTB) y peso de bici y bolsas, para la pantalla 8 | Carretera, 10 kg |
+| Stamina | W' (reserva por encima del FTP), por ejemplo el de intervals.icu | 20 kJ |
 | Pulso | Minutos antes de mostrar la deriva | 20 min |
 
 Los cambios se aplican al momento.
@@ -37,7 +39,8 @@ Los cambios se aplican al momento.
 - **Color automático:** oscuro si el Karoo está en modo noche; si no, según el sol donde estás (GPS) con el margen de luz. Sin posición guardada, de 8:00 a 18:30.
 - **Comer:** el ritmo de hidratos sube con la intensidad (potencia media de 10 min frente al FTP del perfil): 30 g/h por debajo del 50 %, 60 g/h hacia el 75 % y 90 g/h desde el 90 %, con el máximo del ajuste. Avisa cada vez que completas una toma. El aviso muestra el ritmo, lo que llevas y una estimación de los hidratos gastados.
 - **Beber:** intervalo base acortado con esfuerzo alto (hasta −33 %) y con calor desde 20 °C; nunca menos de 8 min.
-- **Tiempo:** Open-Meteo (gratis, sin clave) para tu posición, cada 15 min o al moverte 5 km. La petición la hace el Karoo por wifi o por el móvil (app Companion). El viento es el previsto a 10 m de altura; a la altura del ciclista suele ser algo menor. El rumbo sale del GPS.
+- **Tiempo:** Open-Meteo (gratis, sin clave) para tu posición, cada 15 min o al moverte 5 km; si falla la descarga, reintenta a los 2 min. Es una previsión del modelo meteorológico, no viento medido: en valles, costa o al abrigo de montañas puede no coincidir con lo que notas. La previsión da el viento a 10 m de altura y la app lo pasa a la altura de la bici (× 0,65). El rumbo sale de tu trazado GPS (de hace al menos 50 m) solo yendo a 8 km/h o más; parado o muy lento se mantiene 30 s y después no se indica si es de cara o a favor. Si el dato tiene más de 30 min (sin conexión), se pinta en gris con su hora.
+- **Stamina:** no es el algoritmo de Garmin (no es público), sino un equivalente. La actual es el W' balance (modelo de Skiba) con tu FTP del perfil del Karoo y el W' de los ajustes. La potencial es un depósito de fondo que se gasta según la intensidad con la curva 2 h × (P/FTP)^-4 (≈6 h al 75 % FTP, ≈11 h al 65 %) y solo baja. «Te quedan» usa la potencia y velocidad medias de los últimos 5 min. Las recomendaciones salen tras el primer minuto, una cada vez y cada una se mantiene al menos 30 s; «no llegas» solo aparece con ruta cargada y mirando el ritmo de la última media hora. El estado se guarda cada 30 s, así que si se reinicia la extensión a mitad de salida no vuelve al 100 %.
 - **Ruta prevista:** tu velocidad en cada tramo de 200 m sale de un modelo físico: la potencia (la media de la salida tras 10 min o, al empezar, el 65 % del FTP), tu peso más el de la bici, la pendiente del perfil de la ruta, el rozamiento y el aire (distintos en carretera y MTB). En bajada se limita a 50 km/h en carretera y 35 en MTB. La previsión es de 8 puntos de la ruta a la hora en que pasarás.
 - Los avisos salen solos mientras grabas, aunque no tengas ninguna pantalla de la app a la vista, y se pausan con la salida.
 
@@ -64,7 +67,7 @@ Perfiles → página nueva de **un solo campo** → toca el campo → **Gregario
 ## Estructura
 ```
 app/src/main/kotlin/com/carlos/karoopantallas/
-├── PantallasExtension.kt     Registra las 7 pantallas y los 2 campos pequeños y arranca los procesos de fondo
+├── PantallasExtension.kt     Registra las 9 pantallas y los 2 campos pequeños y arranca los procesos de fondo
 ├── PageScreen.kt             Recoge los datos y envía la imagen al Karoo cada segundo
 ├── MainActivity.kt           Pantalla de ajustes
 ├── render/                   Dibujo (Painter, Palette) y una clase por pantalla
@@ -77,6 +80,7 @@ app/src/main/kotlin/com/carlos/karoopantallas/
     ├── RouteForecast.kt      Previsión de la ruta (Open-Meteo, varios puntos) para la pantalla 8
     ├── WindLayer.kt          Tramos de la ruta clasificados por el viento para la capa del mapa
     ├── RideTracker.kt        Zonas de pulso y deriva
+    ├── Stamina.kt            Stamina potencial y actual, «te quedan» y recomendaciones
     └── Snapshot.kt, Streams.kt, Polyline.kt
 karoo-ext/                    SDK oficial de Hammerhead (v1.1.9, Apache 2.0)
 ```

@@ -54,6 +54,12 @@
         description="@string/plan_ruta_desc"
         graphical="true"
         icon="@drawable/ic_ruta" />
+    <DataType
+        typeId="stamina-oscura"
+        displayName="@string/stamina_name"
+        description="@string/stamina_desc"
+        graphical="true"
+        icon="@drawable/ic_stamina" />
     <!-- Campos pequeños para la página del mapa -->
     <DataType
         typeId="viento"

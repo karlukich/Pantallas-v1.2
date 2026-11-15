@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.RemoteViews
 import com.carlos.karoopantallas.data.RideTracker
 import com.carlos.karoopantallas.data.Snapshot
+import com.carlos.karoopantallas.data.Stamina
 import com.carlos.karoopantallas.data.RouteForecast
 import com.carlos.karoopantallas.data.Theme
 import com.carlos.karoopantallas.data.Weather
@@ -94,7 +95,7 @@ class PageScreen(
             // Latido de 1 s: redibuja aunque no cambie ningún dato (previsión, color automático, parado)
             val tick = flow { while (true) { emit(Unit); delay(1000) } }
             combine(points, profile, navigation, ride, tick) { p, prof, nav, rs, _ ->
-                Snapshot(p, prof, rs, nav, RideTracker.state(), Weather.current(), RouteForecast.current())
+                Snapshot(p, prof, rs, nav, RideTracker.state(), Weather.current(), RouteForecast.current(), Stamina.current())
             }
                 .sample(1000)
                 .collect { snap ->
