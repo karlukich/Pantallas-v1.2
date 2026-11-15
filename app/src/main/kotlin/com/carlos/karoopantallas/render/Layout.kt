@@ -7,6 +7,7 @@ import com.carlos.karoopantallas.data.WindSide
 import com.carlos.karoopantallas.render.Painter.A
 import io.hammerhead.karooext.models.UserProfile
 import kotlin.math.max
+import kotlin.math.roundToInt
 
 /** Una pantalla: qué datos necesita del Karoo y cómo se dibuja (coordenadas de diseño 480 × 620). */
 interface Layout {
@@ -79,6 +80,52 @@ internal object Common {
     fun windArrow(p: Painter, w: WeatherState, pal: Palette, cx: Float, cy: Float, size: Float) {
         val deg = w.arrowDeg ?: w.windFrom?.let { (it + 180) % 360 } ?: return
         p.arrow(cx, cy, size, deg.toFloat(), windColor(w, pal))
+    }
+
+    /** «TIEMPO EN ZONAS»: barra con el reparto real del tiempo en cada zona (pulso o potencia), 500–620. */
+    fun zoneBars(p: Painter, pal: Palette, ms: List<Long>, current: Int?) {
+        val total = ms.sum()
+        p.txt("TIEMPO EN ZONAS", 32f, 508.6f, 22f, pal.label)
+        if (current != null && total > 0) {
+            val share = (ms.getOrElse(current) { 0L } * 100.0 / total).roundToInt()
+            p.txt("Z${current + 1} · $share %", R, 509.4f, 18f, pal.unit, A.R)
+        }
+        val top = 538.5f
+        val bottom = 572.5f
+        if (total <= 0) {
+            p.rect(32f, top, R, bottom, pal.track)
+            return
+        }
+        val used = ms.withIndex().filter { it.value > 0 }
+        val gap = 3f
+        val avail = (R - 32f) - gap * (used.size - 1)
+        var x = 32f
+        for ((i, v) in used) {
+            val w = avail * v / total
+            val isCurrent = i == current
+            p.rect(x, top, x + w, bottom, pal.zone(i), if (isCurrent) 1f else 0.55f)
+            if (v * 100.0 / total >= 9) p.txt("Z${i + 1}", x, 590.3f, 16f, if (isCurrent) pal.text else pal.unit)
+            x += w + gap
+        }
+    }
+
+    /** Fila de cuatro datos (rótulo arriba, cifra debajo): izquierda, dos centradas y derecha. */
+    fun row4(
+        p: Painter, pal: Palette, labelBase: Float, valueBase: Float, size: Float,
+        cells: List<Triple<String, String, Int?>>,
+    ) {
+        val colW = ((R - COL_L) - 3 * 10f) / 4
+        val xs = listOf(
+            COL_L to A.L,
+            COL_L + colW + 10f + colW / 2 to A.C,
+            COL_L + 2 * (colW + 10f) + colW / 2 to A.C,
+            R to A.R,
+        )
+        cells.forEachIndexed { i, (label, value, color) ->
+            val (x, a) = xs[i]
+            p.txt(label, x, labelBase, 20f, pal.label, a)
+            p.num(value, x, valueBase, p.fitNum(value, size, colW), color ?: pal.text, a)
+        }
     }
 
     fun int(v: Double?) = Fmt.int(v)

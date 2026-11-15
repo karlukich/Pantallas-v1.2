@@ -6,7 +6,7 @@ Extensión para Hammerhead Karoo con nueve pantallas de datos a página completa
 |---|---|
 | **1 · Ruta** | Velocidad y media, potencia 3 s con zona y barra dentro de la zona, NORM, pulso con zona, pendiente coloreada, distancia y viento relativo a tu marcha |
 | **2 · Velocidad y tiempo** | Velocidad, media y máxima, distancia total y de la vuelta, tiempo en movimiento y total, distancia a destino y hora de llegada |
-| **3 · Potencia a fondo** | Potencia 3 s con zona y límites, W/kg, 10 s, 30 s, vuelta, NORM, media, máxima, IF, TSS y kJ |
+| **3 · Potencia a fondo** | Potencia 3 s con zona y límites, W/kg, 10 s, 30 s, vuelta, NORM, media, IF, TSS y reparto del tiempo por zonas de potencia |
 | **4 · Pulso a fondo** | Pulso con zona y límites, % FC máx., media, máxima, vuelta, tiempo seguido en la zona, tiempo en Z4 o más, deriva y reparto del tiempo por zonas |
 | **5 · Subida (Climber)** | Perfil del puerto actual coloreado por pendiente, puerto n de N, pendiente, VAM, lo que queda (km y m), tiempo a cima, potencia, W/kg y pulso |
 | **6 · Entreno** | Entreno estructurado en curso: potencia en verde/azul/rojo según el objetivo del paso, barra con el rango, cuenta atrás del paso, cadencia frente a su objetivo, paso n de N, tiempo que queda, pulso, potencia de la vuelta y viento |
@@ -79,7 +79,7 @@ app/src/main/kotlin/com/carlos/karoopantallas/
     ├── RoutePlan.kt          Modelo de velocidad, hora de paso, puntos de control y viento por tramo
     ├── RouteForecast.kt      Previsión de la ruta (Open-Meteo, varios puntos) para la pantalla 8
     ├── WindLayer.kt          Tramos de la ruta clasificados por el viento para la capa del mapa
-    ├── RideTracker.kt        Zonas de pulso y deriva
+    ├── RideTracker.kt        Tiempo en zonas de pulso y potencia y deriva
     ├── Stamina.kt            Stamina potencial y actual, «te quedan» y recomendaciones
     └── Snapshot.kt, Streams.kt, Polyline.kt
 karoo-ext/                    SDK oficial de Hammerhead (v1.1.9, Apache 2.0)

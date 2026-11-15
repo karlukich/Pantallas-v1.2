@@ -8,7 +8,7 @@
     <string name="velocidad_name">2 · Velocidad y tiempo</string>
     <string name="velocidad_desc">Velocidad, media y máxima, distancia total y de vuelta, tiempo en movimiento y total, distancia a destino y hora de llegada.</string>
     <string name="potencia_name">3 · Potencia a fondo</string>
-    <string name="potencia_desc">Potencia 3 s con zona y límites, W/kg, 10 s, 30 s, vuelta, normalizada, media, máxima, IF, TSS y kJ.</string>
+    <string name="potencia_desc">Potencia 3 s con zona y límites, W/kg, 10 s, 30 s, vuelta, normalizada, media, IF, TSS y tiempo en cada zona de potencia.</string>
     <string name="pulso_name">4 · Pulso a fondo</string>
     <string name="pulso_desc">Pulso con zona, % de FC máxima, media, máxima, vuelta, tiempo en zona, Z4+, deriva y tiempo en cada zona.</string>
     <string name="subida_name">5 · Subida (Climber)</string>

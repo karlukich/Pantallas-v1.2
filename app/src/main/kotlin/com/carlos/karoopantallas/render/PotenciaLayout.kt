@@ -7,13 +7,13 @@ import com.carlos.karoopantallas.render.Painter.A
 import io.hammerhead.karooext.models.DataType.Type
 import kotlin.math.max
 
-/** 3B / 3C · Potencia a fondo: potencia 3 s con zona, W/kg, medias de 10 s / 30 s / vuelta, NP, IF, TSS y kJ. */
+/** 3 · Potencia a fondo: potencia 3 s con zona, W/kg, medias de 10 s / 30 s / vuelta, NP, media, IF, TSS y tiempo en cada zona. */
 object PotenciaLayout : Layout {
     override val types = listOf(
         Type.SMOOTHED_3S_AVERAGE_POWER, Type.POWER_TO_WEIGHT,
         Type.SMOOTHED_10S_AVERAGE_POWER, Type.SMOOTHED_30S_AVERAGE_POWER, Type.POWER_LAP,
-        Type.NORMALIZED_POWER, Type.AVERAGE_POWER, Type.MAX_POWER,
-        Type.INTENSITY_FACTOR, Type.TRAINING_STRESS_SCORE, Type.ENERGY_OUTPUT,
+        Type.NORMALIZED_POWER, Type.AVERAGE_POWER,
+        Type.INTENSITY_FACTOR, Type.TRAINING_STRESS_SCORE,
     )
 
     override fun draw(p: Painter, s: Snapshot, pal: Palette) {
@@ -46,24 +46,19 @@ object PotenciaLayout : Layout {
             Triple("30 S", Fmt.int(s.v(Type.SMOOTHED_30S_AVERAGE_POWER)), null),
             Triple("VUELTA", Fmt.int(s.v(Type.POWER_LAP)), null),
         ))
-        Common.row3(p, pal, 387f, 469.6f, 76f, listOf(
-            Triple("NORM", Fmt.int(s.v(Type.NORMALIZED_POWER)), null),
-            Triple("MEDIA", Fmt.int(s.v(Type.AVERAGE_POWER)), null),
-            Triple("MÁX", Fmt.int(s.v(Type.MAX_POWER)), null),
-        ))
-
         val ifv = s.v(Type.INTENSITY_FACTOR)
         val ifColor = when {
             ifv == null || ifv < 0.85 -> null
             ifv < 1.0 -> pal.zone(3)
             else -> pal.zone(4)
         }
-        // La energía puede llegar en julios o en kilojulios
-        val energy = s.v(Type.ENERGY_OUTPUT)?.let { if (it > 50_000) it / 1000.0 else it }
-        Common.row3(p, pal, 517f, 594f, 60f, listOf(
+        Common.row4(p, pal, 387f, 455.9f, 54f, listOf(
+            Triple("NORM", Fmt.int(s.v(Type.NORMALIZED_POWER)), null),
+            Triple("MEDIA", Fmt.int(s.v(Type.AVERAGE_POWER)), null),
             Triple("IF", Fmt.dec2(ifv), ifColor),
             Triple("TSS", Fmt.int(s.v(Type.TRAINING_STRESS_SCORE)), null),
-            Triple("KJ", Fmt.int(energy), null),
         ))
+
+        Common.zoneBars(p, pal, s.tracker.powerZoneMs, zone)
     }
 }
