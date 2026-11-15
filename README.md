@@ -1,6 +1,6 @@
-# Gregario Karoo · v1.10
+# Gregario Karoo · v1.11
 
-Extensión para Hammerhead Karoo con diez pantallas de datos a página completa, dos campos pequeños para la página del mapa y avisos de comer, beber y lluvia durante la salida.
+Extensión para Hammerhead Karoo con doce pantallas de datos a página completa, dos campos pequeños para la página del mapa y avisos de comer, beber y lluvia durante la salida.
 
 | Campo en el Karoo | Qué muestra |
 |---|---|
@@ -13,6 +13,8 @@ Extensión para Hammerhead Karoo con diez pantallas de datos a página completa,
 | **7 · Tiempo** | Viento relativo a tu marcha con flecha (de cara, lateral o a favor), km/h, rachas, efecto de cara o a favor, de dónde viene, temperatura, lluvia en la próxima hora y hora de la previsión |
 | **9 · Stamina** | Como en Garmin: stamina potencial (fondo, solo baja) y actual (reserva por encima del FTP), tiempo y km que te quedan a este ritmo, recomendación (afloja, no llegas, recupera, come, tienes margen), W' restante, potencia, % FTP de 5 min y evolución de la salida |
 | **10 · Resumen** | Resumen de la salida: tiempo en movimiento, distancia, desnivel, media, NP, IF, TSS, kJ, pulso medio, deriva, stamina potencial, hidratos de los avisos de comer, tiempo en zonas de potencia y de pulso, km a destino y llegada |
+| **11 · MTB Flight Attendant** | Horquilla y amortiguador con OPEN / PEDAL / LOCK, modo (auto, manual, override), bias, LSC, zona de esfuerzo, cambios de posición y batería; potencia, pulso, velocidad, pendiente, distancia, desnivel y presión de ruedas AXS (o el piñón si no hay sensores de presión) |
+| **12 · Baterías** | Batería del Karoo y de cada sensor emparejado (horquilla, amortiguador, tija, cambio, potenciómetro…) en 5 niveles con la hora del último dato, y aviso de lo que hay que cargar |
 | **8 · Ruta prevista** | Con una ruta cargada: miniatura coloreada por el viento que tendrás al pasar, km que quedan, hora de llegada y seis puntos de control con hora de paso, temperatura, lluvia y viento relativo |
 
 **Capa de viento en el mapa:** con una ruta cargada, colorea cada tramo según te dará el viento previsto: rojo de cara, ámbar lateral y verde a favor. Se quita sola sin ruta o con viento de menos de 8 km/h, y se puede desactivar en ajustes.
@@ -32,6 +34,7 @@ Extensión para Hammerhead Karoo con diez pantallas de datos a página completa,
 | Tiempo | Previsión del tiempo, viento en el mapa y aviso de lluvia (> 60 % en la próxima hora) | Sí, sí, sí |
 | Bici | Tipo (carretera o MTB) y peso de bici y bolsas, para la pantalla 8 | Carretera, 10 kg |
 | Stamina | W' (reserva por encima del FTP), por ejemplo el de intervals.icu | 20 kJ |
+| MTB | Flight Attendant: valores en bruto (para comprobar posiciones y modos) | No |
 | Pulso | Minutos antes de mostrar la deriva | 20 min |
 
 Los cambios se aplican al momento.
@@ -68,7 +71,7 @@ Perfiles → página nueva de **un solo campo** → toca el campo → **Gregario
 ## Estructura
 ```
 app/src/main/kotlin/com/carlos/karoopantallas/
-├── PantallasExtension.kt     Registra las 10 pantallas y los 2 campos pequeños y arranca los procesos de fondo
+├── PantallasExtension.kt     Registra las 12 pantallas y los 2 campos pequeños y arranca los procesos de fondo
 ├── PageScreen.kt             Recoge los datos y envía la imagen al Karoo cada segundo
 ├── MainActivity.kt           Pantalla de ajustes
 ├── render/                   Dibujo (Painter, Palette) y una clase por pantalla
@@ -82,6 +85,7 @@ app/src/main/kotlin/com/carlos/karoopantallas/
     ├── WindLayer.kt          Tramos de la ruta clasificados por el viento para la capa del mapa
     ├── RideTracker.kt        Tiempo en zonas de pulso y potencia y deriva
     ├── Stamina.kt            Stamina potencial y actual, «te quedan» y recomendaciones
+    ├── Devices.kt            Sensores emparejados y su batería (pantalla 12)
     └── Snapshot.kt, Streams.kt, Polyline.kt
 karoo-ext/                    SDK oficial de Hammerhead (v1.1.9, Apache 2.0)
 ```

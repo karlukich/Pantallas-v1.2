@@ -2,9 +2,9 @@
   "label": "Gregario Karoo",
   "packageName": "com.carlos.karoopantallas",
   "latestApkUrl": "https://github.com/karlukich/Pantallas-v1.2/releases/latest/download/gregario-karoo.apk",
-  "latestVersion": "1.10",
-  "latestVersionCode": 11,
+  "latestVersion": "1.11",
+  "latestVersionCode": 12,
   "developer": "Carlos Castillo",
-  "description": "Diez pantallas de datos a página completa (ruta, velocidad y tiempo, potencia, pulso, subida, entreno, tiempo, ruta prevista, stamina y resumen), campos pequeños para el mapa, color automático y avisos de comer, beber y lluvia.",
-  "releaseNotes": "Nuevas pantallas 9 · Stamina (con recomendaciones) y 10 · Resumen. Pantalla 1: stamina arriba y vuelve el desnivel. Potencia: tiempo en cada zona. Viento corregido: a la altura de la bici, rumbo por GPS solo en marcha y dato viejo en gris con su hora."
+  "description": "Doce pantallas de datos a página completa (ruta, velocidad y tiempo, potencia, pulso, subida, entreno, tiempo, ruta prevista, stamina, resumen, MTB con Flight Attendant y baterías), campos pequeños para el mapa, color automático y avisos de comer, beber y lluvia.",
+  "releaseNotes": "Nuevas pantallas 11 · MTB Flight Attendant y 12 · Baterías (Karoo y sensores SRAM: suspensión, tija, cambio y potenciómetro)."
 }

@@ -66,6 +66,18 @@
         description="@string/resumen_desc"
         graphical="true"
         icon="@drawable/ic_resumen" />
+    <DataType
+        typeId="mtb-oscura"
+        displayName="@string/mtb_name"
+        description="@string/mtb_desc"
+        graphical="true"
+        icon="@drawable/ic_mtb" />
+    <DataType
+        typeId="baterias-oscura"
+        displayName="@string/baterias_name"
+        description="@string/baterias_desc"
+        graphical="true"
+        icon="@drawable/ic_stamina" />
     <!-- Campos pequeños para la página del mapa -->
     <DataType
         typeId="viento"

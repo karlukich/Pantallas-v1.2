@@ -105,6 +105,12 @@ object Settings {
         "Energía que puedes gastar por encima del FTP antes de agotarte. Si usas intervals.icu, copia el W' de tu curva de potencia.",
     )
 
+    // ---------- MTB ----------
+    val faRaw = BoolSetting(
+        "fa_bruto", "Flight Attendant: valores en bruto", false,
+        "Muestra en la pantalla 11 los números que manda el Karoo (posición, modo, zona, bias, batería) para comprobar que OPEN / PEDAL / LOCK y AUTO / MANUAL salen bien.",
+    )
+
     // ---------- Pulso ----------
     val driftMinutes = IntSetting("deriva_min", "Deriva a partir de", "min", 20, 10, 60, 5, "Minutos grabados antes de mostrar la deriva pulso/potencia.")
 
@@ -116,6 +122,7 @@ object Settings {
         "TIEMPO" to listOf(weatherOn, windMap, rainAlert),
         "BICI" to listOf(bikeType, bikeKg),
         "STAMINA" to listOf(wPrime),
+        "MTB" to listOf(faRaw),
         "PULSO" to listOf(driftMinutes),
     )
 }

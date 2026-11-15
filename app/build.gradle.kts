@@ -12,8 +12,8 @@ android {
         applicationId = "com.carlos.karoopantallas"
         minSdk = 23
         targetSdk = 34
-        versionCode = 11
-        versionName = "1.10"
+        versionCode = 12
+        versionName = "1.11"
     }
 
     // Clave fija incluida en el proyecto: así cada compilación se puede instalar encima de la anterior.

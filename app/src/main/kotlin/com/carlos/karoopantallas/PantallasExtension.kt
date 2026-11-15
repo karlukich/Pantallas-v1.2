@@ -8,11 +8,14 @@ import com.carlos.karoopantallas.data.RideTracker
 import com.carlos.karoopantallas.data.RouteForecast
 import com.carlos.karoopantallas.data.Settings
 import com.carlos.karoopantallas.data.Stamina
+import com.carlos.karoopantallas.data.Devices
 import com.carlos.karoopantallas.data.Theme
 import com.carlos.karoopantallas.data.Weather
 import com.carlos.karoopantallas.render.ClimberLayout
 import com.carlos.karoopantallas.render.StaminaLayout
 import com.carlos.karoopantallas.render.ResumenLayout
+import com.carlos.karoopantallas.render.MtbLayout
+import com.carlos.karoopantallas.render.BateriasLayout
 import com.carlos.karoopantallas.render.TiempoLayout
 import com.carlos.karoopantallas.render.RutaPrevistaLayout
 import com.carlos.karoopantallas.render.VelocidadDistanciaCompactLayout
@@ -46,7 +49,7 @@ import timber.log.Timber
  * usaban las pantallas B sigan funcionando sin volver a configurarlas.
  * El id "pantallas" y los typeId deben coincidir con res/xml/extension_info.xml.
  */
-class PantallasExtension : KarooExtension("pantallas", "1.10") {
+class PantallasExtension : KarooExtension("pantallas", "1.11") {
 
     private val karooSystem by lazy { KarooSystemService(applicationContext) }
 
@@ -62,6 +65,8 @@ class PantallasExtension : KarooExtension("pantallas", "1.10") {
             "plan-ruta" to RutaPrevistaLayout,
             "stamina" to StaminaLayout,
             "resumen" to ResumenLayout,
+            "mtb" to MtbLayout,
+            "baterias" to BateriasLayout,
         ).map { (key, layout) -> PageScreen(karooSystem, extension, "$key-oscura", layout) } + listOf(
             // Campos pequeños para la página del mapa
             PageScreen(karooSystem, extension, "viento", VientoCompactLayout),
@@ -82,6 +87,7 @@ class PantallasExtension : KarooExtension("pantallas", "1.10") {
                 Weather.start(karooSystem)
                 RouteForecast.start(karooSystem)
                 Stamina.start(karooSystem, applicationContext)
+                Devices.start(karooSystem)
             }
         }
     }
@@ -136,6 +142,7 @@ class PantallasExtension : KarooExtension("pantallas", "1.10") {
         Weather.stop()
         RouteForecast.stop()
         Stamina.stop()
+        Devices.stop()
         karooSystem.disconnect()
         super.onDestroy()
     }
