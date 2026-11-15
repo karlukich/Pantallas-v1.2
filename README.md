@@ -1,6 +1,6 @@
 # Gregario Karoo · v1.10
 
-Extensión para Hammerhead Karoo con nueve pantallas de datos a página completa, dos campos pequeños para la página del mapa y avisos de comer, beber y lluvia durante la salida.
+Extensión para Hammerhead Karoo con diez pantallas de datos a página completa, dos campos pequeños para la página del mapa y avisos de comer, beber y lluvia durante la salida.
 
 | Campo en el Karoo | Qué muestra |
 |---|---|
@@ -12,6 +12,7 @@ Extensión para Hammerhead Karoo con nueve pantallas de datos a página completa
 | **6 · Entreno** | Entreno estructurado en curso: potencia en verde/azul/rojo según el objetivo del paso, barra con el rango, cuenta atrás del paso, cadencia frente a su objetivo, paso n de N, tiempo que queda, pulso, potencia de la vuelta y viento |
 | **7 · Tiempo** | Viento relativo a tu marcha con flecha (de cara, lateral o a favor), km/h, rachas, efecto de cara o a favor, de dónde viene, temperatura, lluvia en la próxima hora y hora de la previsión |
 | **9 · Stamina** | Como en Garmin: stamina potencial (fondo, solo baja) y actual (reserva por encima del FTP), tiempo y km que te quedan a este ritmo, recomendación (afloja, no llegas, recupera, come, tienes margen), W' restante, potencia, % FTP de 5 min y evolución de la salida |
+| **10 · Resumen** | Resumen de la salida: tiempo en movimiento, distancia, desnivel, media, NP, IF, TSS, kJ, pulso medio, deriva, stamina potencial, hidratos de los avisos de comer, tiempo en zonas de potencia y de pulso, km a destino y llegada |
 | **8 · Ruta prevista** | Con una ruta cargada: miniatura coloreada por el viento que tendrás al pasar, km que quedan, hora de llegada y seis puntos de control con hora de paso, temperatura, lluvia y viento relativo |
 
 **Capa de viento en el mapa:** con una ruta cargada, colorea cada tramo según te dará el viento previsto: rojo de cara, ámbar lateral y verde a favor. Se quita sola sin ruta o con viento de menos de 8 km/h, y se puede desactivar en ajustes.
@@ -67,7 +68,7 @@ Perfiles → página nueva de **un solo campo** → toca el campo → **Gregario
 ## Estructura
 ```
 app/src/main/kotlin/com/carlos/karoopantallas/
-├── PantallasExtension.kt     Registra las 9 pantallas y los 2 campos pequeños y arranca los procesos de fondo
+├── PantallasExtension.kt     Registra las 10 pantallas y los 2 campos pequeños y arranca los procesos de fondo
 ├── PageScreen.kt             Recoge los datos y envía la imagen al Karoo cada segundo
 ├── MainActivity.kt           Pantalla de ajustes
 ├── render/                   Dibujo (Painter, Palette) y una clase por pantalla

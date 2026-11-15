@@ -22,7 +22,7 @@ object StaminaLayout : Layout {
     private const val MID = 222.5f
 
     /** Color según el nivel: > 50 % turquesa, > 25 % amarillo, > 10 % naranja y rojo por debajo. */
-    private fun level(v: Double?, pal: Palette): Int = when {
+    internal fun level(v: Double?, pal: Palette): Int = when {
         v == null -> pal.neutral
         v > 50 -> pal.zone(1)
         v > 25 -> pal.zone(2)

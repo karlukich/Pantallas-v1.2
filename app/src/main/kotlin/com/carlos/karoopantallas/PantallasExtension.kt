@@ -12,6 +12,7 @@ import com.carlos.karoopantallas.data.Theme
 import com.carlos.karoopantallas.data.Weather
 import com.carlos.karoopantallas.render.ClimberLayout
 import com.carlos.karoopantallas.render.StaminaLayout
+import com.carlos.karoopantallas.render.ResumenLayout
 import com.carlos.karoopantallas.render.TiempoLayout
 import com.carlos.karoopantallas.render.RutaPrevistaLayout
 import com.carlos.karoopantallas.render.VelocidadDistanciaCompactLayout
@@ -60,6 +61,7 @@ class PantallasExtension : KarooExtension("pantallas", "1.10") {
             "tiempo" to TiempoLayout,
             "plan-ruta" to RutaPrevistaLayout,
             "stamina" to StaminaLayout,
+            "resumen" to ResumenLayout,
         ).map { (key, layout) -> PageScreen(karooSystem, extension, "$key-oscura", layout) } + listOf(
             // Campos pequeños para la página del mapa
             PageScreen(karooSystem, extension, "viento", VientoCompactLayout),

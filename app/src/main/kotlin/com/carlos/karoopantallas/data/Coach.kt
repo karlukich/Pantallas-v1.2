@@ -161,6 +161,9 @@ class Fuel {
         owed = 0.0; eaten = 0; burned = 0.0; drinkProgress = 0.0; lastEatSecond = -1
     }
 
+    /** Gramos de hidratos de los avisos de comer de esta salida (lo que la app te ha pedido comer). */
+    fun eatenGrams(): Int = eaten
+
     /** Segundos desde el último aviso de comer (null si aún no ha habido ninguno). */
     fun secondsSinceEat(): Int? = lastEatSecond.takeIf { it >= 0 }?.let { seconds - it }
 
