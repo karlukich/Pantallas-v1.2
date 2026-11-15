@@ -7,13 +7,13 @@ import com.carlos.karoopantallas.render.Painter.A
 import io.hammerhead.karooext.models.DataType.Type
 import kotlin.math.max
 
-/** 1 · Ruta: velocidad, potencia con zona, pulso, pendiente, distancia y viento. */
+/** 1 · Ruta: velocidad, potencia con zona, pulso, pendiente, distancia, desnivel y viento. */
 object RutaLayout : Layout {
     override val types = listOf(
         Type.SPEED, Type.AVERAGE_SPEED,
         Type.SMOOTHED_3S_AVERAGE_POWER, Type.NORMALIZED_POWER,
         Type.HEART_RATE, Type.ELEVATION_GRADE,
-        Type.DISTANCE,
+        Type.DISTANCE, Type.ELEVATION_GAIN,
     )
 
     override fun draw(p: Painter, s: Snapshot, pal: Palette) {
@@ -89,23 +89,32 @@ object RutaLayout : Layout {
         }
     }
 
-    /** 470–620: distancia con 2 decimales (a mitad de tamaño) y viento relativo a tu marcha. */
+    /** 470–620: tres columnas: distancia con 2 decimales (a mitad de tamaño), desnivel acumulado y viento relativo a tu marcha. */
     private fun distanceAndWind(p: Painter, s: Snapshot, pal: Palette) {
         val lw = p.txt("DISTANCIA ", 18f, 498.6f, 22f, pal.label)
         p.txt(s.distUnit, 18f + lw, 498.6f, 22f, pal.unit)
-        p.numDec(Fmt.dec2(s.dist(s.v(Type.DISTANCE))), 18f, 595.9f, 88f, pal.text, maxW = 225f)
+        p.numDec(Fmt.dec2(s.dist(s.v(Type.DISTANCE))), 18f, 590f, 76f, pal.text, maxW = 140f)
+
+        p.txt("DESNIVEL +", MID_COL, 498.6f, 22f, pal.label, A.C)
+        p.numDec(
+            Fmt.int(s.elev(s.v(Type.ELEVATION_GAIN))), MID_COL, 590f, 76f, pal.text, A.C,
+            unit = s.elevUnit, unitSize = 22f, unitColor = pal.unit, maxW = 140f,
+        )
 
         val w = s.weather
         val color = Common.windColor(w, pal)
         p.txt("VIENTO", R, 498.6f, 22f, pal.label, A.R)
         val speed = Fmt.int(w.windKmh)
-        val nw = p.num(speed, R, 580f, p.fitNum(speed, 76f, 95f), if (w.hasWind) color else pal.text, A.R)
-        if (w.hasWind) Common.windArrow(p, w, pal, R - nw - 34f, 553f, 54f)
+        val nw = p.num(speed, R, 580f, p.fitNum(speed, 64f, 80f), if (w.hasWind) color else pal.text, A.R)
+        if (w.hasWind) Common.windArrow(p, w, pal, R - nw - 25f, 557.6f, 40f)
         val sub = when {
             w.hasWind && w.stale -> "DE LAS ${w.updated ?: "--:--"}"
             w.side != null -> w.side!!.label
             else -> "km/h"
         }
-        p.txt(sub, R, 609f, 18f, if (w.side != null && !w.stale) color else pal.unit, A.R)
+        p.txt(sub, R, 609f, 16f, if (w.side != null && !w.stale) color else pal.unit, A.R)
     }
+
+    /** Centro de la columna del desnivel */
+    private const val MID_COL = 232f
 }
