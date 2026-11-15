@@ -59,34 +59,6 @@ object PulsoLayout : Layout {
             Triple("DERIVA", drift, null),
         ))
 
-        zoneBars(p, s, pal, zone)
-    }
-
-    /** Barra con el reparto real del tiempo en cada zona de pulso. */
-    private fun zoneBars(p: Painter, s: Snapshot, pal: Palette, current: Int?) {
-        val ms = s.tracker.hrZoneMs
-        val total = ms.sum()
-        p.txt("TIEMPO EN ZONAS", 32f, 508.6f, 22f, pal.label)
-        if (current != null && total > 0) {
-            val share = (ms.getOrElse(current) { 0L } * 100.0 / total).roundToInt()
-            p.txt("Z${current + 1} · $share %", R, 509.4f, 18f, pal.unit, A.R)
-        }
-        val top = 538.5f
-        val bottom = 572.5f
-        if (total <= 0) {
-            p.rect(32f, top, R, bottom, pal.track)
-            return
-        }
-        val used = ms.withIndex().filter { it.value > 0 }
-        val gap = 3f
-        val avail = (R - 32f) - gap * (used.size - 1)
-        var x = 32f
-        for ((i, v) in used) {
-            val w = avail * v / total
-            val isCurrent = i == current
-            p.rect(x, top, x + w, bottom, pal.zone(i), if (isCurrent) 1f else 0.55f)
-            if (v * 100.0 / total >= 9) p.txt("Z${i + 1}", x, 590.3f, 16f, if (isCurrent) pal.text else pal.unit)
-            x += w + gap
-        }
+        Common.zoneBars(p, pal, s.tracker.hrZoneMs, zone)
     }
 }

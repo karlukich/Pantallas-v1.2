@@ -157,7 +157,7 @@ object RouteForecast {
             for (j in 0 until time.length()) {
                 hours[time.getLong(j)] = ForecastSample.Hour(
                     d("temperature_2m", j), d("precipitation_probability", j)?.toInt(),
-                    d("wind_speed_10m", j), d("wind_direction_10m", j), d("weather_code", j)?.toInt(),
+                    Weather.atRider(d("wind_speed_10m", j)), d("wind_direction_10m", j), d("weather_code", j)?.toInt(),
                 )
             }
             ForecastSample(dists.getOrElse(i) { 0.0 }, hours)

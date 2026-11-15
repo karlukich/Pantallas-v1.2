@@ -7,9 +7,12 @@ import com.carlos.karoopantallas.data.consumerFlow
 import com.carlos.karoopantallas.data.RideTracker
 import com.carlos.karoopantallas.data.RouteForecast
 import com.carlos.karoopantallas.data.Settings
+import com.carlos.karoopantallas.data.Stamina
 import com.carlos.karoopantallas.data.Theme
 import com.carlos.karoopantallas.data.Weather
 import com.carlos.karoopantallas.render.ClimberLayout
+import com.carlos.karoopantallas.render.StaminaLayout
+import com.carlos.karoopantallas.render.ResumenLayout
 import com.carlos.karoopantallas.render.TiempoLayout
 import com.carlos.karoopantallas.render.RutaPrevistaLayout
 import com.carlos.karoopantallas.render.VelocidadDistanciaCompactLayout
@@ -43,7 +46,7 @@ import timber.log.Timber
  * usaban las pantallas B sigan funcionando sin volver a configurarlas.
  * El id "pantallas" y los typeId deben coincidir con res/xml/extension_info.xml.
  */
-class PantallasExtension : KarooExtension("pantallas", "1.9") {
+class PantallasExtension : KarooExtension("pantallas", "1.10") {
 
     private val karooSystem by lazy { KarooSystemService(applicationContext) }
 
@@ -57,6 +60,8 @@ class PantallasExtension : KarooExtension("pantallas", "1.9") {
             "entreno" to EntrenoLayout,
             "tiempo" to TiempoLayout,
             "plan-ruta" to RutaPrevistaLayout,
+            "stamina" to StaminaLayout,
+            "resumen" to ResumenLayout,
         ).map { (key, layout) -> PageScreen(karooSystem, extension, "$key-oscura", layout) } + listOf(
             // Campos pequeños para la página del mapa
             PageScreen(karooSystem, extension, "viento", VientoCompactLayout),
@@ -76,6 +81,7 @@ class PantallasExtension : KarooExtension("pantallas", "1.9") {
                 Coach.start(karooSystem)
                 Weather.start(karooSystem)
                 RouteForecast.start(karooSystem)
+                Stamina.start(karooSystem, applicationContext)
             }
         }
     }
@@ -98,7 +104,7 @@ class PantallasExtension : KarooExtension("pantallas", "1.9") {
             while (isActive) {
                 val w = Weather.current()
                 val r = route
-                val on = Settings.windMap.value && r != null && w.windFrom != null && (w.windKmh ?: 0.0) >= 8.0
+                val on = Settings.windMap.value && r != null && w.windFrom != null && (w.windKmh ?: 0.0) >= com.carlos.karoopantallas.data.RoutePlan.MIN_WIND_KMH
                 // La dirección se redondea a 10° para no redibujar por cambios mínimos
                 val key = if (on) "${r.hashCode()}|${((w.windFrom ?: 0.0) / 10).roundToInt()}" else "off"
                 if (key != lastKey) {
@@ -129,6 +135,7 @@ class PantallasExtension : KarooExtension("pantallas", "1.9") {
         Coach.stop()
         Weather.stop()
         RouteForecast.stop()
+        Stamina.stop()
         karooSystem.disconnect()
         super.onDestroy()
     }

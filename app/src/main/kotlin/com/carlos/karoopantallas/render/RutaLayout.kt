@@ -6,14 +6,15 @@ import com.carlos.karoopantallas.render.Common.R
 import com.carlos.karoopantallas.render.Painter.A
 import io.hammerhead.karooext.models.DataType.Type
 import kotlin.math.max
+import kotlin.math.roundToInt
 
-/** 1 · Ruta: velocidad, potencia con zona, pulso, pendiente, distancia y viento. */
+/** 1 · Ruta: velocidad, stamina, potencia con zona, pulso, pendiente, distancia, desnivel y viento. */
 object RutaLayout : Layout {
     override val types = listOf(
         Type.SPEED, Type.AVERAGE_SPEED,
         Type.SMOOTHED_3S_AVERAGE_POWER, Type.NORMALIZED_POWER,
         Type.HEART_RATE, Type.ELEVATION_GRADE,
-        Type.DISTANCE,
+        Type.DISTANCE, Type.ELEVATION_GAIN,
     )
 
     override fun draw(p: Painter, s: Snapshot, pal: Palette) {
@@ -39,6 +40,27 @@ object RutaLayout : Layout {
         val pivot = 150.2f + 0.05f * size
         val top = pivot - (pivot - (150.2f - Painter.CAP * size)) * 1.23f
         p.txt(unit, 18f + w + 8f, top + Painter.CAP * 24f, 24f, pal.unit)
+        stamina(p, s, pal)
+    }
+
+    /**
+     * Arriba a la derecha (encima de MEDIA): stamina actual en % y barra fina con la raya de la potencial,
+     * coloreadas según el nivel, como en la pantalla 9.
+     */
+    private fun stamina(p: Painter, s: Snapshot, pal: Palette) {
+        val st = s.stamina
+        val cur = st.current ?: return
+        val color = StaminaLayout.level(cur, pal)
+        // A la derecha del km/h (que como mucho llega a ~300) y por encima de su parte de arriba
+        val left = 320f
+        val pw = p.txt("%", R, 25f, 16f, color, A.R)
+        val vw = p.num("${cur.roundToInt()}", R - pw - 3f, 25f, 30f, color, A.R)
+        p.txt("STAMINA", R - pw - 3f - vw - 7f, 25f, 16f, pal.unit, A.R)
+        p.bar(left, 34f, R, 44f, cur / 100, pal.track, color)
+        st.potential?.let {
+            val x = left + (R - left) * (it / 100).toFloat().coerceIn(0f, 1f)
+            p.rect(x - 1.5f, 31f, x + 1.5f, 47f, pal.text)
+        }
     }
 
     /** 165–320: franja y barra de zona, cifra en color de zona con Zx / W; NORM a la derecha. */
@@ -89,18 +111,32 @@ object RutaLayout : Layout {
         }
     }
 
-    /** 470–620: distancia con 2 decimales (a mitad de tamaño) y viento relativo a tu marcha. */
+    /** 470–620: tres columnas: distancia con 2 decimales (a mitad de tamaño), desnivel acumulado y viento relativo a tu marcha. */
     private fun distanceAndWind(p: Painter, s: Snapshot, pal: Palette) {
         val lw = p.txt("DISTANCIA ", 18f, 498.6f, 22f, pal.label)
         p.txt(s.distUnit, 18f + lw, 498.6f, 22f, pal.unit)
-        p.numDec(Fmt.dec2(s.dist(s.v(Type.DISTANCE))), 18f, 595.9f, 88f, pal.text, maxW = 225f)
+        p.numDec(Fmt.dec2(s.dist(s.v(Type.DISTANCE))), 18f, 590f, 76f, pal.text, maxW = 140f)
+
+        p.txt("DESNIVEL +", MID_COL, 498.6f, 22f, pal.label, A.C)
+        p.numDec(
+            Fmt.int(s.elev(s.v(Type.ELEVATION_GAIN))), MID_COL, 590f, 76f, pal.text, A.C,
+            unit = s.elevUnit, unitSize = 22f, unitColor = pal.unit, maxW = 140f,
+        )
 
         val w = s.weather
         val color = Common.windColor(w, pal)
         p.txt("VIENTO", R, 498.6f, 22f, pal.label, A.R)
         val speed = Fmt.int(w.windKmh)
-        val nw = p.num(speed, R, 580f, p.fitNum(speed, 76f, 95f), if (w.hasWind) color else pal.text, A.R)
-        if (w.hasWind) Common.windArrow(p, w, pal, R - nw - 34f, 553f, 54f)
-        p.txt(w.side?.label ?: "km/h", R, 609f, 18f, if (w.side != null) color else pal.unit, A.R)
+        val nw = p.num(speed, R, 580f, p.fitNum(speed, 64f, 80f), if (w.hasWind) color else pal.text, A.R)
+        if (w.hasWind) Common.windArrow(p, w, pal, R - nw - 25f, 557.6f, 40f)
+        val sub = when {
+            w.hasWind && w.stale -> "DE LAS ${w.updated ?: "--:--"}"
+            w.side != null -> w.side!!.label
+            else -> "km/h"
+        }
+        p.txt(sub, R, 609f, 16f, if (w.side != null && !w.stale) color else pal.unit, A.R)
     }
+
+    /** Centro de la columna del desnivel */
+    private const val MID_COL = 232f
 }

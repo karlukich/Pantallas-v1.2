@@ -23,6 +23,8 @@ data class TrackerState(
     val z4PlusMs: Long,
     /** Deriva pulso/potencia en % (positiva = el pulso sube para la misma potencia) */
     val drift: Double?,
+    /** Milisegundos en cada zona de potencia (índice 0 = Z1) */
+    val powerZoneMs: List<Long> = emptyList(),
 ) {
     companion object {
         val EMPTY = TrackerState(emptyList(), null, 0L, null)
@@ -44,6 +46,7 @@ object RideTracker {
     @Volatile private var profile: UserProfile? = null
 
     private var zoneMs = LongArray(7)
+    private var powerZoneMs = LongArray(7)
     private var lastZone: Int? = null
     private var streakMs = 0L
     private var hrSamples = FloatArray(4 * 3600)
@@ -78,6 +81,7 @@ object RideTracker {
     private fun reset() {
         synchronized(lock) {
             zoneMs = LongArray(7)
+            powerZoneMs = LongArray(7)
             lastZone = null
             streakMs = 0L
             samples = 0
@@ -89,6 +93,20 @@ object RideTracker {
     }
 
     private fun tickLocked() {
+        // Tiempo en zonas de potencia (con 0 W también cuenta, en Z1, como en TrainingPeaks o intervals.icu)
+        val watts = power
+        val pZones = profile?.powerZones.orEmpty()
+        if (watts != null && pZones.isNotEmpty()) {
+            val z = pZones.indexOfFirst { watts >= it.min && watts <= it.max }.let {
+                when {
+                    it >= 0 -> it
+                    watts > pZones.last().max -> pZones.lastIndex
+                    else -> 0
+                }
+            }.coerceIn(0, powerZoneMs.lastIndex)
+            powerZoneMs[z] += 1000
+        }
+
         val bpm = hr?.takeIf { it > 0 } ?: return
         val zones = profile?.heartRateZones.orEmpty()
         if (zones.isNotEmpty()) {
@@ -115,7 +133,9 @@ object RideTracker {
     fun state(): TrackerState = synchronized(lock) {
         val count = profile?.heartRateZones?.size?.takeIf { it > 0 } ?: 5
         val ms = zoneMs.take(count.coerceAtMost(zoneMs.size))
+        val pCount = profile?.powerZones?.size?.takeIf { it > 0 } ?: 7
         TrackerState(
+            powerZoneMs = powerZoneMs.take(pCount.coerceAtMost(powerZoneMs.size)),
             hrZoneMs = ms,
             currentZoneMs = if (lastZone != null) streakMs else null,
             z4PlusMs = ms.drop(3).sum(),

@@ -154,11 +154,18 @@ class Fuel {
     private var eaten = 0
     private var burned = 0.0
     private var drinkProgress = 0.0
+    @Volatile private var lastEatSecond = -1
 
     fun reset() {
         window.fill(0.0); idx = 0; sum = 0.0; seconds = 0
-        owed = 0.0; eaten = 0; burned = 0.0; drinkProgress = 0.0
+        owed = 0.0; eaten = 0; burned = 0.0; drinkProgress = 0.0; lastEatSecond = -1
     }
+
+    /** Gramos de hidratos de los avisos de comer de esta salida (lo que la app te ha pedido comer). */
+    fun eatenGrams(): Int = eaten
+
+    /** Segundos desde el último aviso de comer (null si aún no ha habido ninguno). */
+    fun secondsSinceEat(): Int? = lastEatSecond.takeIf { it >= 0 }?.let { seconds - it }
 
     /** Intensidad relativa (potencia media 10 min / FTP). */
     fun intensity(ftp: Double): Double = if (seconds == 0) 0.0 else sum / minOf(seconds, window.size) / ftp
@@ -211,6 +218,7 @@ class Fuel {
         if (seconds >= Settings.fuelStart.value * 60 && owed >= portion) {
             owed -= portion
             eaten += portion
+            lastEatSecond = seconds
             return Reminder.Eat(portion, rate.roundToInt(), eaten, burned.roundToInt())
         }
         return null
