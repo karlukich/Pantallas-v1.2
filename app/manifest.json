@@ -5,6 +5,6 @@
   "latestVersion": "1.10",
   "latestVersionCode": 11,
   "developer": "Carlos Castillo",
-  "description": "Nueve pantallas de datos a página completa (ruta, velocidad y tiempo, potencia, pulso, subida, entreno, tiempo, ruta prevista y stamina), campos pequeños para el mapa, color automático y avisos de comer, beber y lluvia.",
-  "releaseNotes": "Nueva pantalla 9 · Stamina con recomendaciones. Viento corregido: velocidad a la altura de la bici, rumbo por GPS solo en marcha y dato viejo en gris con su hora."
+  "description": "Diez pantallas de datos a página completa (ruta, velocidad y tiempo, potencia, pulso, subida, entreno, tiempo, ruta prevista, stamina y resumen), campos pequeños para el mapa, color automático y avisos de comer, beber y lluvia.",
+  "releaseNotes": "Nuevas pantallas 9 · Stamina (con recomendaciones) y 10 · Resumen. Pantalla 1: stamina arriba y vuelve el desnivel. Potencia: tiempo en cada zona. Viento corregido: a la altura de la bici, rumbo por GPS solo en marcha y dato viejo en gris con su hora."
 }
